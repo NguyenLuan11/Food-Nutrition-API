@@ -1,0 +1,11 @@
+Get all Nutrients
+---
+tags:
+  - NUTRIENTS
+
+responses:
+  200:
+    description: Get all nutrients successful and return list of nutrients
+
+  404:
+    description: Not found list of nutrients

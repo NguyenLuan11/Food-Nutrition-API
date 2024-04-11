@@ -1,0 +1,11 @@
+Get all User's BMI
+---
+tags:
+  - USER - BMI
+
+responses:
+  200:
+    description: Get all user's BMI successful and return list of user's BMI.
+
+  404:
+    description: Not found list of user's BMI.

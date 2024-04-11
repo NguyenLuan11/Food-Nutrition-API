@@ -1,0 +1,27 @@
+Add new Food - Nutrient
+---
+tags:
+  - FOOD - NUTRIENT
+parameters:
+  - in: body
+    name: body
+    description: The body must contain ids of food and nutrient.
+    required: true
+    schema:
+      type: object
+      required:
+        - "foodID"
+        - "nutrientID"
+      properties:
+        foodID:
+          type: "int"
+          example: 1
+        nutrientID:
+          type: "int"
+          example: 1
+responses:
+  200:
+    description: When added successfully new food - nutrient.
+
+  400:
+    description: Fails to add new food - nutrient due to bad request data.

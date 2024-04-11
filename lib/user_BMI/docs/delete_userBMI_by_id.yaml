@@ -1,0 +1,17 @@
+Delete User's BMI by id
+---
+tags:
+  - USER - BMI
+
+parameters:
+  - in: path
+    name: id
+    description: The id of user's BMI which you want to delete.
+    required: true
+
+responses:
+  200:
+    description: Delete successfully user's BMI.
+
+  404:
+    description: Not found user's BMI by id.

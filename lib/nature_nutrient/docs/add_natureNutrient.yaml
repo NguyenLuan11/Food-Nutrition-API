@@ -1,0 +1,23 @@
+Add new Nature Nutrient
+---
+tags:
+  - NATURE NUTRIENT
+parameters:
+  - in: body
+    name: body
+    description: The body must contain information's data of the nature nutrient.
+    required: true
+    schema:
+      type: object
+      required:
+        - "natureName"
+      properties:
+        natureName:
+          type: "string"
+          example: "Protein"
+responses:
+  200:
+    description: When added successfully new nature nutrient.
+
+  400:
+    description: Fails to add new nature nutrient due to bad request data.

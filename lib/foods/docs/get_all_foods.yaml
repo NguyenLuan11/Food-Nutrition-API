@@ -1,0 +1,11 @@
+Get all Foods
+---
+tags:
+  - FOODS
+
+responses:
+  200:
+    description: Get all foods successful and return list of foods
+
+  404:
+    description: Not found list of foods

@@ -1,0 +1,17 @@
+Get User's BMI by User's name
+---
+tags:
+  - USER - BMI
+
+parameters:
+  - in: path
+    name: userName
+    description: The name of user which you want to find list user's BMI.
+    required: true
+
+responses:
+  200:
+    description: Get successfully list of user's BMI.
+
+  404:
+    description: Not found list of user's BMI by user's name.

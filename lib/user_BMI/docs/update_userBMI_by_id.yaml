@@ -1,0 +1,32 @@
+Update User's BMI
+---
+tags:
+  - USER - BMI
+parameters:
+  - in: path
+    name: id
+    description: The id of user's BMI which you want to update
+    required: true
+
+  - in: body
+    name: body
+    description: The body should contain information's data of the user's BMI.
+    required: true
+    schema:
+      type: object
+      required:
+        - "userID"
+        - "result"
+      properties:
+        userID:
+          type: "int"
+          example: 1
+        result:
+          type: "float"
+          example: 23.7
+responses:
+  200:
+    description: When updated successfully user's BMI.
+
+  400:
+    description: Fails to update user's BMI due to bad request data.

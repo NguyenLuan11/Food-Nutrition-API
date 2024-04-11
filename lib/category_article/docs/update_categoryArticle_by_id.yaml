@@ -1,0 +1,28 @@
+Update Category
+---
+tags:
+  - CATEGORY ARTICLE
+parameters:
+  - in: path
+    name: id
+    description: The id of category which you want to update
+    required: true
+
+  - in: body
+    name: body
+    description: The body should contain information's data of the category.
+    required: true
+    schema:
+      type: object
+      required:
+        - "categoryName"
+      properties:
+        categoryName:
+          type: "string"
+          example: "Dinh dưỡng"
+responses:
+  200:
+    description: When updated successfully category
+
+  400:
+    description: Fails to update category due to bad request data

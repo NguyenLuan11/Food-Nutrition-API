@@ -1,0 +1,11 @@
+Get all Nature Nutrient
+---
+tags:
+  - NATURE NUTRIENT
+
+responses:
+  200:
+    description: Get all nature nutrient successful and return list of nature nutrient
+
+  404:
+    description: Not found list of nature nutrient

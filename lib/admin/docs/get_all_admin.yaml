@@ -1,0 +1,11 @@
+Get all Admin
+---
+tags:
+  - ADMIN
+
+responses:
+  200:
+    description: Get all admin successful and return list of books
+
+  404:
+    description: Not found list of admin

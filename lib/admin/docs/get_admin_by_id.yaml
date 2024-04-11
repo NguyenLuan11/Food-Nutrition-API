@@ -1,0 +1,17 @@
+Get Admin by id
+---
+tags:
+  - ADMIN
+
+parameters:
+  - in: path
+    name: id
+    description: The id of admin which you want to find
+    required: true
+
+responses:
+  200:
+    description: Get successfully admin
+
+  404:
+    description: Not found admin by id

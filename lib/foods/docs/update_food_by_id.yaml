@@ -1,0 +1,57 @@
+Update Food
+---
+tags:
+  - FOODS
+parameters:
+  - in: path
+    name: id
+    description: The id of food which you want to update
+    required: true
+
+  - in: body
+    name: body
+    description: The body should contain information's data of the food.
+    required: true
+    schema:
+      type: object
+      required:
+        - "foodName"
+        - "image"
+        - "nutritionValue"
+        - "preservation"
+        - "note"
+      properties:
+        foodName:
+          type: "string"
+          example: "Chuối"
+        image:
+          type: "binary"
+        nutritionValue:
+          type: "text"
+          example: "Các thành phần dinh dưỡng trong chuối có kích cỡ trung bình (100 gam): 89 calo, 75% nước, 
+                    1.1 gam protein, 22.8 gam carbohydrate, 12.2 gam đường, 2.6 gam chất xơ, 0.3 gam chất béo."
+        preservation:
+          type: "text"
+          example: "Cách bảo quản chuối chín trong tủ lạnh cần đặt chúng vào túi zip bảo quản trái cây. Và sau đó đặt túi 
+          vào ngăn mát của tủ lạnh, ở nhiệt độ khoảng 3 độ C. Tuy theo cách làm này, bạn nên sử dụng chuối trong 
+          vòng 3 - 4 ngày để đảm bảo chất lượng của chúng.
+          Ngoài ra, còn một phương pháp khác là gói từng quả chuối bằng giấy báo hoặc đặt từng quả vào túi zip, hoặc bọc 
+          từng quả bằng màng bọc thực phẩm. Sau đó đặt chúng vào ngăn mát của tủ lạnh, nên để vào ngăn cuối cùng ít lạnh hơn. 
+          Việc bao gói chuối lại sẽ giúp chuối tươi ngon trong khoảng 6 - 8 ngày."
+        note:
+          type: "text"
+          example: "Ở Việt Nam cây chuối rất quen thuộc và gần gũi được sử dụng nhiều từ quả đến các bộ phận khác của cây.
+            Quả chuối chín: có thể sử dụng làm thực phẩm bổ dưỡng, làm bánh chuối, mứt, chuối ép...
+            Quả chuối xanh: dùng để nấu canh như chuối nấu dầm nhuyễn, nấu ốc, ếch, om chuối đậu, thái lát cùng bê hấp...
+            Lá chuối: dùng để bọc xôi, gói thực phẩm như giò, nem, gói bánh rợm, bánh nếp, bánh lá. Ngoài ra lá chuối khô 
+            là thứ không thể thiếu khi gói bánh gai tạo mùi vị đặc trưng. Sống tàu lá chuối khô tước ra được dùng làm dây buộc bánh, buộc đồ dùng, vặn dây bện...
+            Hoa chuối: có thể dùng làm nộm cùng với nhiều thực phẩm như: thịt, đậu phụ, tai lợn, giò, lạc, vừng...
+            Thân cây chuối: thân cây thái mỏng có thể sử dụng như rau, ăn ghém, ăn lẩu... Thân cây chuối băm nhỏ còn được sử dụng làm thức ăn cho gia súc, gia cầm.
+            Củ chuối: cũng có thể làm thực phẩm như om, nấu. Người Tày ở vùng Việt Bắc còn sử dụng củ chuối làm bánh gọi là bánh củ chuối.
+            Nước trong thân cây chuối: hay còn gọi là Ba tiêu du có tác dụng chống rụng tóc và làm mọc tóc nên cũng được người ta sử dụng như một vị thuốc."
+responses:
+  200:
+    description: When updated successfully food
+
+  400:
+    description: Fails to update food due to bad request data

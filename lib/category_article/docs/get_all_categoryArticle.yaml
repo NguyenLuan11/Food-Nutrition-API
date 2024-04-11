@@ -1,0 +1,11 @@
+Get all Category
+---
+tags:
+  - CATEGORY ARTICLE
+
+responses:
+  200:
+    description: Get all categories successful and return list of categories
+
+  404:
+    description: Not found list of categories

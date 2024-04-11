@@ -1,0 +1,11 @@
+Get all Food - Nutrient
+---
+tags:
+  - FOOD - NUTRIENT
+
+responses:
+  200:
+    description: Get all food - nutrient successful and return list of food - nutrient.
+
+  404:
+    description: Not found list of food - nutrient.

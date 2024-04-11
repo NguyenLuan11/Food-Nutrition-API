@@ -1,0 +1,38 @@
+Add new Admin
+---
+tags:
+  - ADMIN
+parameters:
+  - in: body
+    name: body
+    description: The body must contain information's data of the admin.
+    required: true
+    schema:
+      type: object
+      required:
+        - "adminName"
+        - "fullName"
+        - "image"
+        - "password"
+        - "email"
+      properties:
+        adminName:
+          type: "string"
+          example: "Johnny"
+        fullName:
+          type: "string"
+          example: "Johnny Deep"
+        image:
+          type: "binary"
+        password:
+          type: "string"
+          example: "12345"
+        email:
+          type: "string"
+          example: "johnny@gmail.com"
+responses:
+  200:
+    description: When added successfully new admin.
+
+  400:
+    description: Fails to add new admin due to bad request data.

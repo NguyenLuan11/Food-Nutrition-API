@@ -1,0 +1,36 @@
+Update Food - Nutrient
+---
+tags:
+  - FOOD - NUTRIENT
+parameters:
+  - in: path
+    name: foodID
+    description: The id of food which you want to update.
+    required: true
+  - in: path
+    name: nutrientID
+    description: The id of nutrient which you want to update.
+    required: true
+
+  - in: body
+    name: body
+    description: The body should contain ids of food and nutrient.
+    required: true
+    schema:
+      type: object
+      required:
+        - "foodID"
+        - "nutrientID"
+      properties:
+        foodID:
+          type: "int"
+          example: 1
+        nutrientID:
+          type: "int"
+          example: 1
+responses:
+  200:
+    description: When updated successfully food - nutrient.
+
+  400:
+    description: Fails to update food - nutrient due to bad request data.

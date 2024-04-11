@@ -1,0 +1,59 @@
+Add new Nutrient
+---
+tags:
+  - NUTRIENTS
+parameters:
+  - in: body
+    name: body
+    description: The body must contain information's data of the nutrient.
+    required: true
+    schema:
+      type: object
+      required:
+        - "nutrientName"
+        - "natureID"
+        - "description"
+        - "needed"
+        - "function"
+        - "deficiencySigns"
+        - "excessSigns"
+        - "subjectInterest"
+        - "shortagePrevention"
+      properties:
+        nutrientName:
+          type: "string"
+          example: "Carbohydrate"
+        natureID:
+          type: "int"
+          example: 1
+        description:
+          type: "text"
+          example: "Carbohydrate, hoặc carbs, là các phân tử đường . Cùng với protein và chất béo, carbohydrate là một 
+          trong ba chất dinh dưỡng chính có trong thực phẩm và đồ uống. Cơ thể bạn phân hủy carbohydrate thành glucose. Glucose, hay đường huyết, là nguồn năng lượng chính cho tế bào, mô và cơ quan của cơ thể bạn."
+        needed:
+          type: "float"
+          example: 125
+        function:
+          type: "text"
+          example: "Carbohydrate đóng vai trò quan trọng trong cơ thể con người. Chúng hoạt động như một nguồn năng lượng, 
+          giúp kiểm soát quá trình chuyển hóa glucose và insulin trong máu, tham gia vào quá trình chuyển hóa cholesterol và chất béo trung tính, đồng thời hỗ trợ quá trình lên men ."
+        deficiencySigns:
+          type: "text"
+          example: "Chế độ ăn thiếu carbohydrate có thể gây đau đầu, mệt mỏi, suy nhược, khó tập trung, buồn nôn, táo bón, 
+          hôi miệng và thiếu hụt vitamin và khoáng chất ."
+        excessSigns:
+          type: "text"
+          example: "Dưới đây là 10 dấu hiệu cảnh báo cần chú ý nếu bạn đang tiêu thụ quá nhiều carbohydrate: 
+          Tăng cân. Đường huyết cao. Mệt mỏi. Cholesterol cao. Insulin huyết thanh cao. Các vấn đề về da. Triglyceride cao. Thèm ăn đồ ngọt."
+        subjectInterest:
+          type: "text"
+          example: "Chủ đề quan tâm của carbohydrate"
+        shortagePrevention:
+          type: "text"
+          example: "Ngăn ngừa tình trạng thiếu carbohydrate."
+responses:
+  200:
+    description: When added successfully new nutrient.
+
+  400:
+    description: Fails to add new nutrient due to bad request data.

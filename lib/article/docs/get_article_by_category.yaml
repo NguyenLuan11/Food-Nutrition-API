@@ -1,0 +1,17 @@
+Get Articles by Category's Name
+---
+tags:
+  - ARTICLE
+
+parameters:
+  - in: path
+    name: categoryName
+    description: The category's name of article which you want to find list articles.
+    required: true
+
+responses:
+  200:
+    description: Get successfully list articles.
+
+  404:
+    description: Not found list articles by category's name.

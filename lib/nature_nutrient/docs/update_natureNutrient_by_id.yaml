@@ -1,0 +1,28 @@
+Update Nature Nutrient
+---
+tags:
+  - NATURE NUTRIENT
+parameters:
+  - in: path
+    name: id
+    description: The id of nature nutrient which you want to update
+    required: true
+
+  - in: body
+    name: body
+    description: The body should contain information's data of the nature nutrient.
+    required: true
+    schema:
+      type: object
+      required:
+        - "natureName"
+      properties:
+        natureName:
+          type: "string"
+          example: "Protein"
+responses:
+  200:
+    description: When updated successfully nature nutrient.
+
+  400:
+    description: Fails to update nature nutrient due to bad request data.

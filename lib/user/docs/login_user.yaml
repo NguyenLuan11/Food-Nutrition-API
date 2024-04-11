@@ -1,0 +1,30 @@
+Login User
+---
+tags:
+  - USER
+parameters:
+  - in: body
+    name: body
+    description: The body must contain username and password of the user to login.
+    required: true
+    schema:
+      type: object
+      required:
+        - "userName"
+        - "password"
+      properties:
+        userName:
+          type: "string"
+          example: "Johnny"
+        password:
+          type: "string"
+          example: "12345"
+responses:
+  200:
+    description: Logged successfully.
+
+  404:
+    description: Incorrect username or password.
+
+  400:
+    description: Fails to login due to bad request data.

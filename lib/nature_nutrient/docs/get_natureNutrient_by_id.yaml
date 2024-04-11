@@ -1,0 +1,17 @@
+Get Nature Nutrient by id
+---
+tags:
+  - NATURE NUTRIENT
+
+parameters:
+  - in: path
+    name: id
+    description: The id of nature nutrient which you want to find.
+    required: true
+
+responses:
+  200:
+    description: Get successfully nature nutrient.
+
+  404:
+    description: Not found nature nutrient by id.

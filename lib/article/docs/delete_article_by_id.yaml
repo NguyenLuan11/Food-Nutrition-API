@@ -1,0 +1,17 @@
+Delete Article by id
+---
+tags:
+  - ARTICLE
+
+parameters:
+  - in: path
+    name: id
+    description: The id of article which you want to delete
+    required: true
+
+responses:
+  200:
+    description: Delete successfully article
+
+  404:
+    description: Not found article by id

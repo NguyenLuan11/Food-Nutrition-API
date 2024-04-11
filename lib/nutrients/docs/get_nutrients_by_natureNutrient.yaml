@@ -1,0 +1,17 @@
+Get Nutrients by Nature Nutrient's Name
+---
+tags:
+  - NUTRIENTS
+
+parameters:
+  - in: path
+    name: natureNutrientName
+    description: The name of nature nutrient which you want to find list nutrients.
+    required: true
+
+responses:
+  200:
+    description: Get successfully list nutrients.
+
+  404:
+    description: Not found list nutrients by name of nature nutrient.

@@ -1,0 +1,21 @@
+Delete Food - Nutrient
+---
+tags:
+  - FOOD - NUTRIENT
+
+parameters:
+  - in: path
+    name: foodID
+    description: The id of food which you want to delete.
+    required: true
+  - in: path
+    name: nutrientID
+    description: The id of nutrient which you want to delete.
+    required: true
+
+responses:
+  200:
+    description: Delete successfully food - nutrient.
+
+  404:
+    description: Not found food - nutrient by foodID and nutrientID

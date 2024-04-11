@@ -1,0 +1,11 @@
+Get all User
+---
+tags:
+  - USER
+
+responses:
+  200:
+    description: Get all users successful and return list of users.
+
+  404:
+    description: Not found list of users.

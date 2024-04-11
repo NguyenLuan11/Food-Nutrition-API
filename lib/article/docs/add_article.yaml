@@ -1,0 +1,42 @@
+Add new Article
+---
+tags:
+  - ARTICLE
+parameters:
+  - in: body
+    name: body
+    description: The body must contain information's data of the article.
+    required: true
+    schema:
+      type: object
+      required:
+        - "title"
+        - "thumbnail"
+        - "author"
+        - "shortDescription"
+        - "content"
+        - "categoryID"
+      properties:
+        title:
+          type: "string"
+          example: "Dinh dưỡng cho trẻ"
+        thumbnail:
+          type: "binary"
+        author:
+          type: "string"
+          example: "TS. Hoàng Minh Đăng"
+        shortDescription:
+          type: "text"
+          example: "Bài báo nghiên cứu về các chất dinh dưỡng cần thiết cho trẻ phát triển khỏe mạnh."
+        content:
+          type: "text"
+          example: "Nội dung bài báo ..."
+        categoryID:
+          type: "int"
+          example: 1
+responses:
+  200:
+    description: When added successfully new article.
+
+  400:
+    description: Fails to add new article due to bad request data.

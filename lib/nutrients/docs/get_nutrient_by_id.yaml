@@ -1,0 +1,17 @@
+Get Nutrient by id
+---
+tags:
+  - NUTRIENTS
+
+parameters:
+  - in: path
+    name: id
+    description: The id of nutrient which you want to find
+    required: true
+
+responses:
+  200:
+    description: Get successfully nutrient
+
+  404:
+    description: Not found nutrient by id

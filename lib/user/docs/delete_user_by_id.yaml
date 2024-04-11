@@ -1,0 +1,17 @@
+Delete User by id
+---
+tags:
+  - USER
+
+parameters:
+  - in: path
+    name: id
+    description: The id of user which you want to delete
+    required: true
+
+responses:
+  200:
+    description: Delete successfully user
+
+  404:
+    description: Not found user by id

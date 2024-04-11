@@ -1,0 +1,17 @@
+Get Food by id
+---
+tags:
+  - FOODS
+
+parameters:
+  - in: path
+    name: id
+    description: The id of food which you want to find
+    required: true
+
+responses:
+  200:
+    description: Get successfully food
+
+  404:
+    description: Not found food by id

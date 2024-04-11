@@ -1,0 +1,11 @@
+Get all Article
+---
+tags:
+  - ARTICLE
+
+responses:
+  200:
+    description: Get all articles successful and return list of articles
+
+  404:
+    description: Not found list of articles

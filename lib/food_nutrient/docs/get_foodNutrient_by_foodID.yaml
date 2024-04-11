@@ -1,0 +1,17 @@
+Get Food - Nutrient by foodID
+---
+tags:
+  - FOOD - NUTRIENT
+
+parameters:
+  - in: path
+    name: foodID
+    description: The id of food which you want to find.
+    required: true
+
+responses:
+  200:
+    description: Get successfully food - nutrient.
+
+  404:
+    description: Not found food - nutrient by foodID.

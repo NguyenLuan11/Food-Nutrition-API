@@ -1,0 +1,17 @@
+Get Article by id
+---
+tags:
+  - ARTICLE
+
+parameters:
+  - in: path
+    name: id
+    description: The id of article which you want to find
+    required: true
+
+responses:
+  200:
+    description: Get successfully article
+
+  404:
+    description: Not found article by id

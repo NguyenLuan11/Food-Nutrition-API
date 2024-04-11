@@ -1,0 +1,17 @@
+Delete Category by id
+---
+tags:
+  - CATEGORY ARTICLE
+
+parameters:
+  - in: path
+    name: id
+    description: The id of category which you want to delete
+    required: true
+
+responses:
+  200:
+    description: Delete successfully category
+
+  404:
+    description: Not found category by id

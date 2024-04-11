@@ -1,0 +1,17 @@
+Get Category by id
+---
+tags:
+  - CATEGORY ARTICLE
+
+parameters:
+  - in: path
+    name: id
+    description: The id of category which you want to find
+    required: true
+
+responses:
+  200:
+    description: Get successfully category
+
+  404:
+    description: Not found category by id
