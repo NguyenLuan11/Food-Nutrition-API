@@ -80,6 +80,8 @@ def add_user_service():
             db.session.add(new_user)
             db.session.commit()
 
+            list_user_bmi = get_list_user_bmi_by_userID(new_user.userID)
+
             return jsonify({
                 "userID": new_user.userID,
                 "userName": new_user.userName,
@@ -90,7 +92,8 @@ def add_user_service():
                 "phone": new_user.phone if new_user.phone else None,
                 "address": new_user.address if new_user.address else None,
                 "dateJoining": new_user.dateJoining.strftime("%Y-%m-%d"),
-                "modified_date": new_user.modified_date.strftime("%Y-%m-%d") if new_user.modified_date else None
+                "modified_date": new_user.modified_date.strftime("%Y-%m-%d") if new_user.modified_date else None,
+                "list_user_bmi": list_user_bmi if list_user_bmi else []
             }), 200
         except IndentationError:
             db.session.rollback()
@@ -175,6 +178,8 @@ def update_user_by_id_service(id):
 
                     db.session.commit()
 
+                    list_user_bmi = get_list_user_bmi_by_userID(user.userID)
+
                     return jsonify({
                         "userID": user.userID,
                         "userName": user.userName,
@@ -185,7 +190,8 @@ def update_user_by_id_service(id):
                         "phone": user.phone,
                         "address": user.address,
                         "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
-                        "modified_date": user.modified_date.strftime("%Y-%m-%d")
+                        "modified_date": user.modified_date.strftime("%Y-%m-%d"),
+                        "list_user_bmi": list_user_bmi if list_user_bmi else []
                     }), 200
                 except IndentationError:
                     db.session.rollback()
