@@ -1,0 +1,18 @@
+Refresh Access Token
+---
+tags:
+  - USER
+description: Endpoint to refresh the access token using a valid refresh token.
+parameters:
+  - in: header
+    name: Authorization
+    required: true
+    type: string
+    default: 'Bearer [Refresh Token]'
+    description: Bearer token obtained during login
+responses:
+  200:
+    description: Access Token Refreshed Successfully
+
+  401:
+    description: Unauthorized
