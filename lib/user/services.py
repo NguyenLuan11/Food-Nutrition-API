@@ -51,7 +51,7 @@ def login_user_service():
                 "address": user.address if user.address else None,
                 "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
-                "list_user_bmi": list_user_bmi if list_user_bmi else None
+                "list_user_bmi": list_user_bmi if list_user_bmi else []
             }), 200
         else:
             return jsonify({"message": "Incorrect username or password!"}), 404
@@ -103,6 +103,8 @@ def get_user_by_id_service(id):
     try:
         user = User.query.get(id)
         if user:
+            list_user_bmi = get_list_user_bmi_by_userID(user.userID)
+
             return jsonify({
                 "userID": user.userID,
                 "userName": user.userName,
@@ -113,7 +115,8 @@ def get_user_by_id_service(id):
                 "phone": user.phone if user.phone else None,
                 "address": user.address if user.address else None,
                 "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
-                "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None
+                "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
+                "list_user_bmi": list_user_bmi if list_user_bmi else []
             }), 200
         else:
             return jsonify({"message": "Not found user!"}), 404
@@ -128,6 +131,8 @@ def get_all_user_service():
         if users:
             user_list = []
             for user in users:
+                list_user_bmi = get_list_user_bmi_by_userID(user.userID)
+
                 user_list.append({
                     "userID": user.userID,
                     "userName": user.userName,
@@ -138,7 +143,8 @@ def get_all_user_service():
                     "phone": user.phone if user.phone else None,
                     "address": user.address if user.address else None,
                     "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
-                    "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None
+                    "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
+                    "list_user_bmi": list_user_bmi if list_user_bmi else []
                 })
             return jsonify(user_list), 200
         else:

@@ -13,6 +13,7 @@ from .foods.controller import foods
 from .nature_nutrient.controller import natureNutrient
 from .nutrients.controller import nutrients
 from .user.controller import user
+from .user_BMI.controller import userBMI
 
 
 def create_app(config_file="config.py"):
@@ -45,6 +46,7 @@ def create_app(config_file="config.py"):
     app.register_blueprint(natureNutrient)
     app.register_blueprint(nutrients)
     app.register_blueprint(user)
+    app.register_blueprint(userBMI)
 
     print(app.config["SECRET_KEY"])
 

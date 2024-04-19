@@ -100,7 +100,7 @@ def get_all_nutrient_service():
                     "subjectInterest": item.subjectInterest if item.subjectInterest else None,
                     "shortagePrevention": item.shortagePrevention if item.shortagePrevention else None,
                     "created_date": item.created_date.strftime("%Y-%m-%d"),
-                    "modified_date": item.modified_date.strftime("%Y-%m-%d") if nutrient.modified_date else None
+                    "modified_date": item.modified_date.strftime("%Y-%m-%d") if item.modified_date else None
                 })
 
             return jsonify(list_nutrients), 200
@@ -211,7 +211,7 @@ def get_nutrients_by_natureNutrient_service(natureNutrientName):
                     "subjectInterest": item.subjectInterest if item.subjectInterest else None,
                     "shortagePrevention": item.shortagePrevention if item.shortagePrevention else None,
                     "created_date": item.created_date.strftime("%Y-%m-%d"),
-                    "modified_date": item.modified_date.strftime("%Y-%m-%d") if nutrient.modified_date else None
+                    "modified_date": item.modified_date.strftime("%Y-%m-%d") if item.modified_date else None
                 })
 
             return jsonify(list_nutrients), 200

@@ -21,7 +21,7 @@ def get_nutrient_by_id(id):
 @nutrients.route("/nutrients", methods=["GET"])
 @swag_from("docs/get_all_nutrients.yaml")
 def get_all_nutrients():
-    return get_all_nutrients()
+    return get_all_nutrient_service()
 
 
 @nutrients.route("/nutrient/<int:id>", methods=["PUT"])

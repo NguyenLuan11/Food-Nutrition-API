@@ -32,7 +32,7 @@ parameters:
           example: "12345"
         dateBirth:
           type: "date"
-          example: 1985-05-17
+          example: "1985-05-17"
         email:
           type: "string"
           example: "johnny@gmail.com"
