@@ -4,6 +4,7 @@ from flask import request, jsonify
 from sqlalchemy.sql import func
 from datetime import date, datetime
 from sqlalchemy import event
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
@@ -38,6 +39,10 @@ def login_user_service():
         user = User.query.filter_by(userName=userName, password=password).first()
 
         if user:
+            # Tạo Access Token và Refresh Token
+            access_token = create_access_token(identity=user.userName)
+            refresh_token = create_refresh_token(identity=user.userName)
+
             list_user_bmi = get_list_user_bmi_by_userID(user.userID)
 
             return jsonify({
@@ -51,12 +56,42 @@ def login_user_service():
                 "address": user.address if user.address else None,
                 "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
-                "list_user_bmi": list_user_bmi if list_user_bmi else []
+                "list_user_bmi": list_user_bmi if list_user_bmi else [],
+                "access_token": access_token,
+                "refresh_token": refresh_token
             }), 200
         else:
             return jsonify({"message": "Incorrect username or password!"}), 404
     else:
         return jsonify({"message": "Login error!"}), 400
+
+
+def refresh_token_service():
+    current_user = get_jwt_identity()
+    new_access_token = create_access_token(identity=current_user)
+
+    return jsonify(access_token=new_access_token), 200
+
+
+def get_user_infor_by_access_token_service():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(userName=current_user).first()
+    if user:
+        list_user_bmi = get_list_user_bmi_by_userID(user.userID)
+
+        return jsonify({
+            "userID": user.userID,
+            "userName": user.userName,
+            "fullName": user.fullName if user.fullName else None,
+            "image": user.image if user.image else None,
+            "dateBirth": user.dateBirth.strftime("%Y-%m-%d"),
+            "email": user.email,
+            "phone": user.phone if user.phone else None,
+            "address": user.address if user.address else None,
+            "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
+            "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
+            "list_user_bmi": list_user_bmi if list_user_bmi else []
+        }), 200
 
 
 def add_user_service():

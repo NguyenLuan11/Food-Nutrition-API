@@ -4,8 +4,8 @@ from ..food_nutrition_ma import UserBMISchema
 from sqlalchemy.sql import func
 
 
-userBMI = UserBMISchema()
-userBMIs = UserBMISchema(many=True)
+userBMI_schema = UserBMISchema()
+userBMIs_schema = UserBMISchema(many=True)
 
 
 def add_userBMI_service():
@@ -68,7 +68,8 @@ def get_all_userBMI_service():
                     "check_date": user_bmi.check_date.strftime("%Y-%m-%d")
                 })
 
-                return jsonify(list_userBMIs), 200
+            return jsonify(list_userBMIs), 200
+            # return userBMIs_schema.jsonify(user_bmis), 200
         else:
             return jsonify({"message": "Not found user's BMI!"}), 404
     except IndentationError:

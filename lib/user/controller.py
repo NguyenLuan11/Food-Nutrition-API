@@ -1,7 +1,8 @@
 from flask import Blueprint
 from .services import add_user_service, get_all_user_service, get_user_by_id_service, \
-    update_user_by_id_service, delete_user_by_id_service, login_user_service
+    update_user_by_id_service, delete_user_by_id_service, login_user_service, refresh_token_service
 from flasgger import swag_from
+from flask_jwt_extended import jwt_required
 
 user = Blueprint("user", __name__, url_prefix="/api/user-management")
 
@@ -10,6 +11,13 @@ user = Blueprint("user", __name__, url_prefix="/api/user-management")
 @swag_from("docs/login_user.yaml")
 def login_user():
     return login_user_service()
+
+
+@user.route("/refresh_token", methods=["POST"])
+@jwt_required(refresh=True)
+@swag_from("docs/refresh_token.yaml")
+def refresh_token():
+    return refresh_token_service()
 
 
 @user.route("/user", methods=["POST"])

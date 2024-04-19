@@ -1,6 +1,7 @@
 from ..model import db, Admin
 from ..food_nutrition_ma import AdminSchema
 from flask import request, jsonify
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 
 admin_schema = AdminSchema()
 admins_schema = AdminSchema(many=True)
@@ -16,6 +17,10 @@ def login_admin_service():
         admin = Admin.query.filter_by(adminName=adminName, password=password).first()
 
         if admin:
+            # Tạo Access Token và Refresh Token
+            access_token = create_access_token(identity=admin.adminName)
+            refresh_token = create_refresh_token(identity=admin.adminName)
+
             return jsonify({
                 "adminID": admin.adminID,
                 "adminName": admin.adminName,
@@ -23,13 +28,21 @@ def login_admin_service():
                 "image": admin.image if admin.image else None,
                 "email": admin.email,
                 "created_date": admin.created_date.strftime("%Y-%m-%d"),
-                "modified_date": admin.modified_date.strftime("%Y-%m-%d") if admin.modified_date else None
+                "modified_date": admin.modified_date.strftime("%Y-%m-%d") if admin.modified_date else None,
+                "access_token": access_token,
+                "refresh_token": refresh_token
             }), 200
         else:
             return jsonify({"message": "Incorrect username or password!"}), 404
     else:
         return jsonify({"message": "Login error!"}), 400
 
+
+def refresh_token_service():
+    current_admin = get_jwt_identity()
+    new_access_token = create_access_token(identity=current_admin)
+
+    return jsonify(access_token=new_access_token), 200
 
 
 def add_admin_service():

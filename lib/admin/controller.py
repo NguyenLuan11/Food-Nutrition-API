@@ -1,7 +1,8 @@
 from flask import Blueprint
 from .services import add_admin_service, get_admin_by_id_service, get_all_admin_service, update_admin_by_id_service, \
-    delete_admin_by_id_service, login_admin_service
+    delete_admin_by_id_service, login_admin_service, refresh_token_service
 from flasgger import swag_from
+from flask_jwt_extended import jwt_required
 
 admin = Blueprint("admin", __name__, url_prefix="/api/admin-management")
 
@@ -10,6 +11,13 @@ admin = Blueprint("admin", __name__, url_prefix="/api/admin-management")
 @swag_from("docs/login_admin.yaml")
 def login_admin():
     return login_admin_service()
+
+
+@admin.route("/refresh_token", methods=["POST"])
+@jwt_required(refresh=True)
+@swag_from("docs/refresh_token.yaml")
+def refresh_token():
+    return refresh_token_service()
 
 
 # ADD NEW ADMIN
