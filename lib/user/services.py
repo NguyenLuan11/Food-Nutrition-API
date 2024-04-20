@@ -161,7 +161,6 @@ def update_image_avt_user_by_accessToken_service():
         return jsonify({"message": "Request error!"}), 400
 
 
-
 def get_user_by_id_service(id):
     try:
         user = User.query.get(id)
