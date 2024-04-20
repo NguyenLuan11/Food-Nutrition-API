@@ -14,7 +14,7 @@ def login_user():
     return login_user_service()
 
 
-@user.route("/refresh_token", methods=["POST"])
+@user.route("/refresh-token", methods=["POST"])
 @jwt_required(refresh=True)
 @swag_from("docs/refresh_token.yaml")
 def refresh_token():
