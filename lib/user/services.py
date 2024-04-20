@@ -135,9 +135,10 @@ def register_user_service():
         return jsonify({"message": "Request error!"}), 400
 
 
-def update_image_avt_user_by_id_service(id):
+def update_image_avt_user_by_accessToken_service():
     try:
-        user = User.query.get(id)
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(userName=current_user).first()
         data = request.json
         if user:
             if data and ('image' in data) and data['image'] and data['image'] != "":

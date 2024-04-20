@@ -2,11 +2,14 @@ Update User's avatar
 ---
 tags:
   - USER
+description: Endpoint to update user's avatar by using a valid access token.
 parameters:
-  - in: path
-    name: id
-    description: The id of user which you want to update
+  - in: header
+    name: Authorization
     required: true
+    type: string
+    default: 'Bearer [Access Token]'
+    description: Bearer token obtained during login
 
   - in: body
     name: body
