@@ -94,23 +94,19 @@ def get_user_infor_by_access_token_service():
         }), 200
 
 
-def add_user_service():
+def register_user_service():
     data = request.json
-    if data and all(key in data for key in ('userName', 'fullName', 'image', 'password', 'dateBirth', 'email',
-        'phone', 'address')) and data['userName'] and data['password'] and data['dateBirth'] and data['email'] \
+    if data and all(key in data for key in ('userName', 'password', 'dateBirth', 'email')) \
+        and data['userName'] and data['password'] and data['dateBirth'] and data['email'] \
         and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "":
         userName = data['userName']
-        fullName = data['fullName'] if data['fullName'] else None
-        image = data['image'] if data['image'] else None
         password = data['password']
         date_list = data['dateBirth'].split('-')
         dateBirth = date(int(date_list[0]), int(date_list[1]), int(date_list[2]))
         email = data['email']
-        phone = data['phone'] if data['phone'] else None
-        address = data['address'] if data['address'] else None
         try:
-            new_user = User(userName=userName, fullName=fullName, image=image, password=password, dateBirth=dateBirth,
-                            email=email, phone=phone, address=address)
+            new_user = User(userName=userName, fullName=None, image=None, password=password, dateBirth=dateBirth,
+                            email=email, phone=None, address=None)
 
             db.session.add(new_user)
             db.session.commit()

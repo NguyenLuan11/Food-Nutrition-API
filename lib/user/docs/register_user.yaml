@@ -1,4 +1,4 @@
-Add new User
+Register new User
 ---
 tags:
   - USER
@@ -11,22 +11,13 @@ parameters:
       type: object
       required:
         - "userName"
-        - "fullName"
-        - "image"
         - "password"
         - "dateBirth"
         - "email"
-        - "phone"
-        - "address"
       properties:
         userName:
           type: "string"
           example: "Johnny"
-        fullName:
-          type: "string"
-          example: "Johnny Deep"
-        image:
-          type: "binary"
         password:
           type: "string"
           example: "12345"
@@ -36,12 +27,6 @@ parameters:
         email:
           type: "string"
           example: "johnny@gmail.com"
-        phone:
-          type: "string"
-          example: "0950080130"
-        address:
-          type: "string"
-          example: "New York, USA"
 responses:
   200:
     description: When added successfully new user.
