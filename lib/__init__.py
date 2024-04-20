@@ -2,6 +2,7 @@ import os
 from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 from flasgger import Swagger, swag_from
+from flask_cors import CORS
 from .model import db
 from .food_nutrition_ma import ma
 from .swagger import template, swagger_config
@@ -18,6 +19,7 @@ from .user_BMI.controller import userBMI
 
 def create_app(config_file="config.py"):
     app = Flask(__name__)
+    CORS(app)
 
     # Add config
     app.config.from_pyfile(config_file)
