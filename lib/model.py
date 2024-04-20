@@ -162,7 +162,7 @@ class Article(db.Model):
 
     articleID = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
-    thumbnail = db.Column(db.LargeBinary)
+    thumbnail = db.Column(db.Text)
     author = db.Column(db.String(100))
     shortDescription = db.Column(db.Text)
     content = db.Column(db.Text, nullable=False)
