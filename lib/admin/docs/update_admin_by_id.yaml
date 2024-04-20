@@ -28,7 +28,8 @@ parameters:
           type: "string"
           example: "Johnny Deep"
         image:
-          type: "binary"
+          type: "text"
+          example: "string base64"
         password:
           type: "string"
           example: "12345"

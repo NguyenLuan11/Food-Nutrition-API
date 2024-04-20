@@ -17,7 +17,6 @@ parameters:
       required:
         - "userName"
         - "fullName"
-        - "image"
         - "password"
         - "dateBirth"
         - "email"
@@ -30,8 +29,6 @@ parameters:
         fullName:
           type: "string"
           example: "Johnny Deep"
-        image:
-          type: "binary"
         password:
           type: "string"
           example: "12345"

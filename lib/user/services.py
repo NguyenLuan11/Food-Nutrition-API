@@ -5,6 +5,8 @@ from sqlalchemy.sql import func
 from datetime import date, datetime
 from sqlalchemy import event
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
+from PIL import Image
+import base64
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
@@ -133,6 +135,32 @@ def register_user_service():
         return jsonify({"message": "Request error!"}), 400
 
 
+def update_image_avt_user_by_id_service(id):
+    try:
+        user = User.query.get(id)
+        data = request.json
+        if user:
+            if data and ('image' in data) and data['image'] and data['image'] != "":
+                try:
+                    user.image = data['image']
+                    db.session.commit()
+
+                    return jsonify({
+                        'image': user.image
+                    }), 200
+                except IndentationError:
+                    db.session.rollback()
+                    return jsonify({"message": "Update user's avatar failed!"}), 400
+            else:
+                return {"message": "No image provided!"}, 400
+        else:
+            return {"message": "User not found!"}, 404
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
+
 def get_user_by_id_service(id):
     try:
         user = User.query.get(id)
@@ -193,13 +221,12 @@ def update_user_by_id_service(id):
         user = User.query.get(id)
         data = request.json
         if user:
-            if data and all(key in data for key in ('userName', 'fullName', 'image', 'password', 'dateBirth', 'email',
+            if data and all(key in data for key in ('userName', 'fullName', 'password', 'dateBirth', 'email',
                 'phone', 'address')) and data['userName'] and data['password'] and data['dateBirth'] and data['email'] \
                 and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "":
                 try:
                     user.userName = data['userName']
                     user.fullName = data['fullName'] if data['fullName'] else None
-                    user.image = data['image'] if data['image'] else None
                     user.password = data['password']
                     date_list = data['dateBirth'].split('-')
                     user.dateBirth = date(int(date_list[0]), int(date_list[1]), int(date_list[2]))
@@ -215,7 +242,7 @@ def update_user_by_id_service(id):
                         "userID": user.userID,
                         "userName": user.userName,
                         "fullName": user.fullName,
-                        "image": user.image,
+                        "image": user.image if user.image else None,
                         "dateBirth": user.dateBirth.strftime("%Y-%m-%d"),
                         "email": user.email,
                         "phone": user.phone,

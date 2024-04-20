@@ -1,0 +1,28 @@
+Update User's avatar
+---
+tags:
+  - USER
+parameters:
+  - in: path
+    name: id
+    description: The id of user which you want to update
+    required: true
+
+  - in: body
+    name: body
+    description: The body should contain image type base64 of the user.
+    required: true
+    schema:
+      type: object
+      required:
+        - "image"
+      properties:
+        image:
+          type: "text"
+          example: "string base64"
+responses:
+  200:
+    description: When updated successfully user' avatar.
+
+  400:
+    description: Fails to update user' avatar due to bad request data.

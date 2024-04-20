@@ -1,6 +1,7 @@
 from flask import Blueprint
 from .services import register_user_service, get_all_user_service, get_user_by_id_service, \
-    update_user_by_id_service, delete_user_by_id_service, login_user_service, refresh_token_service
+    update_user_by_id_service, delete_user_by_id_service, login_user_service, refresh_token_service, \
+    update_image_avt_user_by_id_service
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required
 
@@ -24,6 +25,12 @@ def refresh_token():
 @swag_from("docs/register_user.yaml")
 def register_user():
     return register_user_service()
+
+
+@user.route("/upload-avt/<int:id>", methods=["PUT"])
+@swag_from("docs/update_image_avt_user_by_id.yaml")
+def update_image_avt_user_by_id(id):
+    return update_image_avt_user_by_id_service(id)
 
 
 @user.route("/user/<int:id>", methods=["GET"])
