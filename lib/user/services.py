@@ -32,7 +32,7 @@ def get_list_user_bmi_by_userID(userID):
 def login_user_service():
     data = request.json
     if data and all(key in data for key in ('userName', 'password')) and data['userName'] and data['password'] \
-        and data['userName'] != "" and data['password'] != "":
+            and data['userName'] != "" and data['password'] != "":
         userName = data['userName']
         password = data['password']
 
@@ -97,8 +97,8 @@ def get_user_infor_by_access_token_service():
 def register_user_service():
     data = request.json
     if data and all(key in data for key in ('userName', 'password', 'dateBirth', 'email')) \
-        and data['userName'] and data['password'] and data['dateBirth'] and data['email'] \
-        and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "":
+            and data['userName'] and data['password'] and data['dateBirth'] and data['email'] \
+            and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "":
         userName = data['userName']
         password = data['password']
         date_list = data['dateBirth'].split('-')
@@ -220,8 +220,10 @@ def update_user_by_id_service(id):
         data = request.json
         if user:
             if data and all(key in data for key in ('userName', 'fullName', 'password', 'dateBirth', 'email',
-                'phone', 'address')) and data['userName'] and data['password'] and data['dateBirth'] and data['email'] \
-                and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "":
+                                                    'phone', 'address')) and data['userName'] and data['password'] and \
+                    data['dateBirth'] and data['email'] \
+                    and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data[
+                'email'] != "":
                 try:
                     user.userName = data['userName']
                     user.fullName = data['fullName'] if data['fullName'] else None
