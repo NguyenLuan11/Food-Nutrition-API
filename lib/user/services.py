@@ -5,8 +5,6 @@ from sqlalchemy.sql import func
 from datetime import date, datetime
 from sqlalchemy import event
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
-from PIL import Image
-import base64
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
