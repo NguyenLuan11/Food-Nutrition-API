@@ -54,6 +54,7 @@ def login_user_service():
                 "email": user.email,
                 "phone": user.phone if user.phone else None,
                 "address": user.address if user.address else None,
+                "state": user.state,
                 "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
                 "list_user_bmi": list_user_bmi if list_user_bmi else [],
@@ -88,6 +89,7 @@ def get_user_infor_by_access_token_service():
             "email": user.email,
             "phone": user.phone if user.phone else None,
             "address": user.address if user.address else None,
+            "state": user.state,
             "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
             "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
             "list_user_bmi": list_user_bmi if list_user_bmi else []
@@ -122,15 +124,16 @@ def register_user_service():
                 "email": new_user.email,
                 "phone": new_user.phone if new_user.phone else None,
                 "address": new_user.address if new_user.address else None,
+                "state": new_user.state,
                 "dateJoining": new_user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": new_user.modified_date.strftime("%Y-%m-%d") if new_user.modified_date else None,
                 "list_user_bmi": list_user_bmi if list_user_bmi else []
             }), 200
         except IndentationError:
             db.session.rollback()
-            return jsonify({"message": "Can not add new user!"}), 400
+            return jsonify({"message": "Register Failed!"}), 400
     else:
-        return jsonify({"message": "Request error!"}), 400
+        return jsonify({"message": "Register error!"}), 400
 
 
 def update_image_avt_user_by_accessToken_service():
@@ -174,6 +177,7 @@ def get_user_by_id_service(id):
                 "email": user.email,
                 "phone": user.phone if user.phone else None,
                 "address": user.address if user.address else None,
+                "state": user.state,
                 "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
                 "list_user_bmi": list_user_bmi if list_user_bmi else []
@@ -202,6 +206,7 @@ def get_all_user_service():
                     "email": user.email,
                     "phone": user.phone if user.phone else None,
                     "address": user.address if user.address else None,
+                    "state": user.state,
                     "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                     "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
                     "list_user_bmi": list_user_bmi if list_user_bmi else []
@@ -219,11 +224,10 @@ def update_user_by_id_service(id):
         user = User.query.get(id)
         data = request.json
         if user:
-            if data and all(key in data for key in ('userName', 'fullName', 'password', 'dateBirth', 'email',
-                                                    'phone', 'address')) and data['userName'] and data['password'] and \
-                    data['dateBirth'] and data['email'] \
-                    and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data[
-                'email'] != "":
+            if data and all(key in data for key in ('userName', 'fullName', 'password', 'dateBirth', 'email', 'phone',
+                                                    'address')) and data['userName'] and data['password'] and \
+                    data['dateBirth'] and data['email'] and data['userName'] != "" and data['password'] != "" \
+                    and data['dateBirth'] != "" and data['email'] != "":
                 try:
                     user.userName = data['userName']
                     user.fullName = data['fullName'] if data['fullName'] else None
@@ -247,6 +251,7 @@ def update_user_by_id_service(id):
                         "email": user.email,
                         "phone": user.phone,
                         "address": user.address,
+                        "state": user.state,
                         "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                         "modified_date": user.modified_date.strftime("%Y-%m-%d"),
                         "list_user_bmi": list_user_bmi if list_user_bmi else []
