@@ -16,3 +16,6 @@ responses:
 
   401:
     description: Unauthorized
+
+  403:
+    description: Permission denied

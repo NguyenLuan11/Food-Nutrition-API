@@ -3,6 +3,13 @@ Add new Nature Nutrient
 tags:
   - NATURE NUTRIENT
 parameters:
+  - in: header
+    name: Authorization
+    required: true
+    type: string
+    default: 'Bearer [Access Token Admin]'
+    description: Bearer token obtained during login
+
   - in: body
     name: body
     description: The body must contain information's data of the nature nutrient.
@@ -21,3 +28,6 @@ responses:
 
   400:
     description: Fails to add new nature nutrient due to bad request data.
+
+  403:
+    description: Permission denied

@@ -4,6 +4,13 @@ tags:
   - NUTRIENTS
 
 parameters:
+  - in: header
+    name: Authorization
+    required: true
+    type: string
+    default: 'Bearer [Access Token Admin]'
+    description: Bearer token obtained during login
+
   - in: path
     name: id
     description: The id of nutrient which you want to delete
@@ -15,3 +22,6 @@ responses:
 
   404:
     description: Not found nutrient by id
+
+  403:
+    description: Permission denied

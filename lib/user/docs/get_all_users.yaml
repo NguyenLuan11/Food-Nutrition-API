@@ -3,9 +3,19 @@ Get all User
 tags:
   - USER
 
+parameters:
+  - in: header
+    name: Authorization
+    required: true
+    type: string
+    default: 'Bearer [Access Token Admin]'
+    description: Bearer token obtained during login
 responses:
   200:
     description: Get all users successful and return list of users.
 
   404:
     description: Not found list of users.
+
+  403:
+    description: Permission denied

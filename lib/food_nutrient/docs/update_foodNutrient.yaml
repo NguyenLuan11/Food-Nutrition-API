@@ -3,10 +3,18 @@ Update Food - Nutrient
 tags:
   - FOOD - NUTRIENT
 parameters:
+  - in: header
+    name: Authorization
+    required: true
+    type: string
+    default: 'Bearer [Access Token Admin]'
+    description: Bearer token obtained during login
+
   - in: path
     name: foodID
     description: The id of food which you want to update.
     required: true
+
   - in: path
     name: nutrientID
     description: The id of nutrient which you want to update.
@@ -34,3 +42,6 @@ responses:
 
   400:
     description: Fails to update food - nutrient due to bad request data.
+
+  403:
+    description: Permission denied

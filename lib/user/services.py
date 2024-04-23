@@ -40,8 +40,8 @@ def login_user_service():
 
         if user:
             # Tạo Access Token và Refresh Token
-            access_token = create_access_token(identity=user.userName)
-            refresh_token = create_refresh_token(identity=user.userName)
+            access_token = create_access_token(identity=user.userName, additional_claims={'role': 'user'})
+            refresh_token = create_refresh_token(identity=user.userName, additional_claims={'role': 'user'})
 
             list_user_bmi = get_list_user_bmi_by_userID(user.userID)
 

@@ -1,14 +1,20 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from .services import add_article_service, get_all_articles_service, get_article_by_id_service, \
     update_article_by_id_service, delete_article_by_id_service, get_article_by_category_service
 from flasgger import swag_from
+from flask_jwt_extended import jwt_required, get_jwt
 
 article = Blueprint("article", __name__, url_prefix="/api/article-management")
 
 
 @article.route("/article", methods=["POST"])
+@jwt_required()
 @swag_from("docs/add_article.yaml")
 def add_article():
+    current_admin_role = get_jwt().get('role')
+    if current_admin_role != 'admin':
+        return jsonify({'message': 'Permission denied'}), 403
+
     return add_article_service()
 
 
@@ -25,14 +31,24 @@ def get_all_article():
 
 
 @article.route("/article/<int:id>", methods=["PUT"])
+@jwt_required()
 @swag_from("docs/update_article_by_id.yaml")
 def update_article_by_id(id):
+    current_admin_role = get_jwt().get('role')
+    if current_admin_role != 'admin':
+        return jsonify({'message': 'Permission denied'}), 403
+
     return update_article_by_id_service(id)
 
 
 @article.route("/article/<int:id>", methods=["DELETE"])
+@jwt_required()
 @swag_from("docs/delete_article_by_id.yaml")
 def delete_article_by_id(id):
+    current_admin_role = get_jwt().get('role')
+    if current_admin_role != 'admin':
+        return jsonify({'message': 'Permission denied'}), 403
+
     return delete_article_by_id_service(id)
 
 

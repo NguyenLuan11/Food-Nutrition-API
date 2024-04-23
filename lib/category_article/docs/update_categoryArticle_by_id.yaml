@@ -3,6 +3,13 @@ Update Category
 tags:
   - CATEGORY ARTICLE
 parameters:
+  - in: header
+    name: Authorization
+    required: true
+    type: string
+    default: 'Bearer [Access Token Admin]'
+    description: Bearer token obtained during login
+
   - in: path
     name: id
     description: The id of category which you want to update
@@ -26,3 +33,6 @@ responses:
 
   400:
     description: Fails to update category due to bad request data
+
+  403:
+    description: Permission denied

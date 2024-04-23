@@ -18,8 +18,8 @@ def login_admin_service():
 
         if admin:
             # Tạo Access Token và Refresh Token
-            access_token = create_access_token(identity=admin.adminName)
-            refresh_token = create_refresh_token(identity=admin.adminName)
+            access_token = create_access_token(identity=admin.adminName, additional_claims={'role': 'admin'})
+            refresh_token = create_refresh_token(identity=admin.adminName, additional_claims={'role': 'admin'})
 
             return jsonify({
                 "adminID": admin.adminID,

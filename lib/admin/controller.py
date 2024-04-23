@@ -1,8 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from .services import add_admin_service, get_admin_by_id_service, get_all_admin_service, update_admin_by_id_service, \
     delete_admin_by_id_service, login_admin_service, refresh_token_service
 from flasgger import swag_from
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 
 admin = Blueprint("admin", __name__, url_prefix="/api/admin-management")
 
@@ -17,6 +17,10 @@ def login_admin():
 @jwt_required(refresh=True)
 @swag_from("docs/refresh_token.yaml")
 def refresh_token():
+    current_admin_role = get_jwt().get('role')
+    if current_admin_role != 'admin':
+        return jsonify({'message': 'Permission denied'}), 403
+
     return refresh_token_service()
 
 

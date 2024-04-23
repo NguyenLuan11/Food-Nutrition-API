@@ -3,6 +3,13 @@ Add new Food - Nutrient
 tags:
   - FOOD - NUTRIENT
 parameters:
+  - in: header
+    name: Authorization
+    required: true
+    type: string
+    default: 'Bearer [Access Token Admin]'
+    description: Bearer token obtained during login
+
   - in: body
     name: body
     description: The body must contain ids of food and nutrient.
@@ -25,3 +32,6 @@ responses:
 
   400:
     description: Fails to add new food - nutrient due to bad request data.
+
+  403:
+    description: Permission denied
