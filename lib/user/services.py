@@ -136,10 +136,9 @@ def register_user_service():
         return jsonify({"message": "Register error!"}), 400
 
 
-def update_image_avt_user_by_accessToken_service():
+def update_image_avt_user_by_id_service(id):
     try:
-        current_user = get_jwt_identity()
-        user = User.query.filter_by(userName=current_user).first()
+        user = User.query.get(id)
         data = request.json
         if user:
             if data and ('image' in data) and data['image'] and data['image'] != "":
@@ -155,6 +154,35 @@ def update_image_avt_user_by_accessToken_service():
                     return jsonify({"message": "Update user's avatar failed!"}), 400
             else:
                 return {"message": "No image provided!"}, 400
+        else:
+            return {"message": "User not found!"}, 404
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
+def update_state_user_by_id_service(id):
+    try:
+        user = User.query.get(id)
+        data = request.json
+        if user:
+            if data and ('state' in data) and data['state'] and data['state'] != "":
+                try:
+                    state = data['state']
+                    if state.lower() == 'true':
+                        user.state = True
+                    elif state.lower() == 'false':
+                        user.state = False
+                    db.session.commit()
+
+                    return jsonify({
+                        "message": "Update user's state successfully!"
+                    }), 200
+                except IndentationError:
+                    db.session.rollback()
+                    return jsonify({"message": "Update user's state failed!"}), 400
+            else:
+                return {"message": "No state provided!"}, 400
         else:
             return {"message": "User not found!"}, 404
     except IndentationError:

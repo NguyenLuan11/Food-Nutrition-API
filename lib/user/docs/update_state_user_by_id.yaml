@@ -1,0 +1,39 @@
+Update User's state
+---
+tags:
+  - USER
+description: Endpoint to update user's state by using a valid access token.
+parameters:
+  - in: header
+    name: Authorization
+    required: true
+    type: string
+    default: 'Bearer [Access Token Admin]'
+    description: Bearer token obtained during login
+
+  - in: path
+    name: id
+    description: The id of user which you want to update
+    required: true
+
+  - in: body
+    name: body
+    description: The body should contain state of the user.
+    required: true
+    schema:
+      type: object
+      required:
+        - "state"
+      properties:
+        state:
+          type: "bool"
+          example: "true"
+responses:
+  200:
+    description: When updated successfully user' state.
+
+  400:
+    description: Fails to update user' state due to bad request data.
+
+  403:
+    description: Permission denied

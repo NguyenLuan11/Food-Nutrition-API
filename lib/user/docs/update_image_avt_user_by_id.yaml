@@ -11,6 +11,11 @@ parameters:
     default: 'Bearer [Access Token]'
     description: Bearer token obtained during login
 
+  - in: path
+    name: id
+    description: The id of user which you want to update
+    required: true
+
   - in: body
     name: body
     description: The body should contain image type base64 of the user.
@@ -29,3 +34,6 @@ responses:
 
   400:
     description: Fails to update user' avatar due to bad request data.
+
+  403:
+    description: Permission denied

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from .services import register_user_service, get_all_user_service, get_user_by_id_service, \
     update_user_by_id_service, delete_user_by_id_service, login_user_service, refresh_token_service, \
-    update_image_avt_user_by_accessToken_service
+    update_image_avt_user_by_id_service, update_state_user_by_id_service
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt
 
@@ -33,13 +33,24 @@ def register_user():
 
 @user.route("/upload-avt", methods=["PUT"])
 @jwt_required()
-@swag_from("docs/update_image_avt_user_by_accessToken.yaml")
-def update_image_avt_user_by_accessToken():
+@swag_from("docs/update_image_avt_user_by_id.yaml")
+def update_image_avt_user_by_id(id):
     current_user_role = get_jwt().get('role')
     if current_user_role != 'user':
         return jsonify({'message': 'Permission denied'}), 403
 
-    return update_image_avt_user_by_accessToken_service()
+    return update_image_avt_user_by_id_service(id)
+
+
+@user.route("/user/state/<int:id>", methods=["PUT"])
+@jwt_required()
+@swag_from("docs/update_state_user_by_id.yaml")
+def update_state_user_by_id(id):
+    current_admin_role = get_jwt().get('role')
+    if current_admin_role != 'admin':
+        return jsonify({'message': 'Permission denied'}), 403
+
+    return update_state_user_by_id_service(id)
 
 
 @user.route("/user/<int:id>", methods=["GET"])
