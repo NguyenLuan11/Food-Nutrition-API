@@ -69,7 +69,7 @@ def login_user_service():
 
 def refresh_token_service():
     current_user = get_jwt_identity()
-    new_access_token = create_access_token(identity=current_user)
+    new_access_token = create_access_token(identity=current_user, additional_claims={'role': 'user'})
 
     return jsonify(access_token=new_access_token), 200
 

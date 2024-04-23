@@ -40,7 +40,7 @@ def login_admin_service():
 
 def refresh_token_service():
     current_admin = get_jwt_identity()
-    new_access_token = create_access_token(identity=current_admin)
+    new_access_token = create_access_token(identity=current_admin, additional_claims={'role': 'admin'})
 
     return jsonify(access_token=new_access_token), 200
 
