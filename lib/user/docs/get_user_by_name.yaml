@@ -1,0 +1,17 @@
+Get User by name
+---
+tags:
+  - USER
+
+parameters:
+  - in: path
+    name: userName
+    description: The user name of user which you want to find.
+    required: true
+
+responses:
+  200:
+    description: Get successfully user.
+
+  404:
+    description: Not found user by id.
