@@ -217,6 +217,33 @@ def get_user_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+def get_user_by_name_service(userName):
+    try:
+        user = User.query.filter_by(userName=userName).first()
+        if user:
+            list_user_bmi = get_list_user_bmi_by_userID(user.userID)
+
+            return jsonify({
+                "userID": user.userID,
+                "userName": user.userName,
+                "fullName": user.fullName if user.fullName else None,
+                "image": user.image if user.image else None,
+                "dateBirth": user.dateBirth.strftime("%Y-%m-%d"),
+                "email": user.email,
+                "phone": user.phone if user.phone else None,
+                "address": user.address if user.address else None,
+                "state": user.state,
+                "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
+                "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
+                "list_user_bmi": list_user_bmi if list_user_bmi else []
+            }), 200
+        else:
+            return jsonify({"message": "Not found user!"}), 404
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
 def get_all_user_service():
     try:
         users = User.query.all()
