@@ -24,7 +24,7 @@ def add_article_service():
             db.session.add(new_article)
             db.session.commit()
 
-            category = CategoryArticle.query.get(categoryID)
+            # category = CategoryArticle.query.get(categoryID)
 
             return jsonify({
                 "articleID": new_article.articleID,
@@ -33,7 +33,8 @@ def add_article_service():
                 "author": new_article.author if new_article.author else None,
                 "shortDescription": new_article.shortDescription if new_article.shortDescription else None,
                 "content": new_article.content,
-                "category": category.categoryName if category else None,
+                # "category": category.categoryName if category else None,
+                "categoryID": new_article.categoryID if new_article.categoryID else None,
                 "created_date": new_article.created_date.strftime("%Y-%m-%d"),
                 "modified_date": new_article.modified_date.strftime("%Y-%m-%d") if new_article.modified_date else None
             }), 200
@@ -48,7 +49,7 @@ def get_article_by_id_service(id):
     try:
         article = Article.query.get(id)
         if article:
-            category = CategoryArticle.query.get(article.categoryID)
+            # category = CategoryArticle.query.get(article.categoryID)
 
             return jsonify({
                 "articleID": article.articleID,
@@ -57,7 +58,7 @@ def get_article_by_id_service(id):
                 "author": article.author if article.author else None,
                 "shortDescription": article.shortDescription if article.shortDescription else None,
                 "content": article.content,
-                "category": category.categoryName if category else None,
+                "categoryID": article.categoryID if article.categoryID else None,
                 "created_date": article.created_date.strftime("%Y-%m-%d"),
                 "modified_date": article.modified_date.strftime("%Y-%m-%d") if article.modified_date else None
             }), 200
@@ -74,7 +75,7 @@ def get_all_articles_service():
         if articles:
             articles_list = []
             for article in articles:
-                category = CategoryArticle.query.get(article.categoryID)
+                # category = CategoryArticle.query.get(article.categoryID)
 
                 articles_list.append({
                     "articleID": article.articleID,
@@ -83,7 +84,7 @@ def get_all_articles_service():
                     "author": article.author if article.author else None,
                     "shortDescription": article.shortDescription if article.shortDescription else None,
                     "content": article.content,
-                    "category": category.categoryName if category else None,
+                    "categoryID": article.categoryID if article.categoryID else None,
                     "created_date": article.created_date.strftime("%Y-%m-%d"),
                     "modified_date": article.modified_date.strftime("%Y-%m-%d") if article.modified_date else None
                 })
@@ -113,7 +114,7 @@ def update_article_by_id_service(id):
 
                     db.session.commit()
 
-                    category = CategoryArticle.query.get(article.categoryID)
+                    # category = CategoryArticle.query.get(article.categoryID)
 
                     return jsonify({
                         "articleID": article.articleID,
@@ -122,7 +123,7 @@ def update_article_by_id_service(id):
                         "author": article.author if article.author else None,
                         "shortDescription": article.shortDescription if article.shortDescription else None,
                         "content": article.content,
-                        "category": category.categoryName if category else None,
+                        "categoryID": article.categoryID if article.categoryID else None,
                         "created_date": article.created_date.strftime("%Y-%m-%d"),
                         "modified_date": article.modified_date.strftime("%Y-%m-%d")
                     }), 200
@@ -162,7 +163,7 @@ def get_article_by_category_service(categoryName):
         if articles:
             articles_list = []
             for article in articles:
-                category = CategoryArticle.query.get(article.categoryID)
+                # category = CategoryArticle.query.get(article.categoryID)
 
                 articles_list.append({
                     "articleID": article.articleID,
@@ -171,7 +172,7 @@ def get_article_by_category_service(categoryName):
                     "author": article.author if article.author else None,
                     "shortDescription": article.shortDescription if article.shortDescription else None,
                     "content": article.content,
-                    "category": category.categoryName if category else None,
+                    "categoryID": article.categoryID if article.categoryID else None,
                     "created_date": article.created_date.strftime("%Y-%m-%d"),
                     "modified_date": article.modified_date.strftime("%Y-%m-%d") if article.modified_date else None
                 })

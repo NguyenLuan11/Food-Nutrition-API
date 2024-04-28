@@ -19,7 +19,7 @@ from .user_BMI.controller import userBMI
 
 def create_app(config_file="config.py"):
     app = Flask(__name__)
-    CORS(app)
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     # Add config
     app.config.from_pyfile(config_file)

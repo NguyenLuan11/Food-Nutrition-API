@@ -105,7 +105,7 @@ def update_food_by_id_service(id):
                     return jsonify({
                         "foodID": food.foodID,
                         "foodName": food.foodName,
-                        "image": food.image if food.image else none,
+                        "image": food.image if food.image else None,
                         "nutritionValue": food.nutritionValue,
                         "preservation": food.preservation if food.preservation else None,
                         "note": food.note if food.note else None,
