@@ -92,7 +92,7 @@ def get_all_nutrient_service():
                 list_nutrients.append({
                     "nutrientID": item.nutrientID,
                     "nutrientName": item.nutrientName,
-                    "natureID": nutrient.natureID if nutrient.natureID else None,
+                    "natureID": item.natureID if item.natureID else None,
                     "description": item.description if item.description else None,
                     "needed": item.needed,
                     "function": item.function,
@@ -203,7 +203,7 @@ def get_nutrients_by_natureNutrient_service(natureNutrientName):
                 list_nutrients.append({
                     "nutrientID": item.nutrientID,
                     "nutrientName": item.nutrientName,
-                    "natureID": nutrient.natureID if nutrient.natureID else None,
+                    "natureID": item.natureID if item.natureID else None,
                     "description": item.description if item.description else None,
                     "needed": item.needed,
                     "function": item.function,
