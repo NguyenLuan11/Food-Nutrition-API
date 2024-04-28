@@ -19,7 +19,7 @@ def add_categoryArticle_service():
             db.session.commit()
 
             return jsonify({
-                            "categoryId": new_categoryArticle.categoryID,
+                            "categoryID": new_categoryArticle.categoryID,
                             "categoryName": new_categoryArticle.categoryName,
                             "created_date": new_categoryArticle.created_date.strftime("%Y-%m-%d"),
                             "modified_date": new_categoryArticle.modified_date.strftime("%Y-%m-%d")
@@ -35,7 +35,7 @@ def add_categoryArticle_service():
 def get_categoryArticle_by_id_service(id):
     categoryArticle = CategoryArticle.query.get(id)
     if categoryArticle:
-        return jsonify({"categoryId": categoryArticle.categoryID,
+        return jsonify({"categoryID": categoryArticle.categoryID,
                         "categoryName": categoryArticle.categoryName,
                         "created_date": categoryArticle.created_date.strftime("%Y-%m-%d"),
                         "modified_date": categoryArticle.modified_date.strftime("%Y-%m-%d")
@@ -52,7 +52,7 @@ def get_all_categoryArticle_service():
             categories_list = []
             for category in categoriesArticle:
                 categories_list.append({
-                    "categoryId": category.categoryID,
+                    "categoryID": category.categoryID,
                     "categoryName": category.categoryName,
                     "created_date": category.created_date.strftime("%Y-%m-%d"),
                     "modified_date": category.modified_date.strftime("%Y-%m-%d") if category.modified_date else None
@@ -78,7 +78,7 @@ def update_categoryArticle_by_id_service(id):
                     db.session.commit()
 
                     return jsonify({
-                                    "categoryId": categoryArticle.categoryID,
+                                    "categoryID": categoryArticle.categoryID,
                                     "categoryName": categoryArticle.categoryName,
                                     "created_date": categoryArticle.created_date.strftime("%Y-%m-%d"),
                                     "modified_date": categoryArticle.modified_date.strftime("%Y-%m-%d")
