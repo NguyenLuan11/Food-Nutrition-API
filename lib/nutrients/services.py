@@ -32,12 +32,13 @@ def add_nutrient_service():
             db.session.add(new_nutrient)
             db.session.commit()
 
-            natureNutrient = NatureNutrient.query.get(new_nutrient.natureID)
+            # natureNutrient = NatureNutrient.query.get(new_nutrient.natureID)
 
             return jsonify({
                 "nutrientID": new_nutrient.nutrientID,
                 "nutrientName": new_nutrient.nutrientName,
-                "natureNutrient": natureNutrient.natureName if natureNutrient else None,
+                # "natureNutrient": natureNutrient.natureName if natureNutrient else None,
+                "natureID": new_nutrient.natureID if new_nutrient.natureID else None,
                 "description": new_nutrient.description if new_nutrient.description else None,
                 "needed": new_nutrient.needed,
                 "function": new_nutrient.function,
@@ -59,11 +60,11 @@ def get_nutrient_by_id_service(id):
     try:
         nutrient = Nutrients.query.get(id)
         if nutrient:
-            natureNutrient = NatureNutrient.query.get(nutrient.natureID)
+            # natureNutrient = NatureNutrient.query.get(nutrient.natureID)
             return jsonify({
                 "nutrientID": nutrient.nutrientID,
                 "nutrientName": nutrient.nutrientName,
-                "natureNutrient": natureNutrient.natureName if natureNutrient else None,
+                "natureID": nutrient.natureID if nutrient.natureID else None,
                 "description": nutrient.description if nutrient.description else None,
                 "needed": nutrient.needed,
                 "function": nutrient.function,
@@ -87,11 +88,11 @@ def get_all_nutrient_service():
         if nutrients:
             list_nutrients = []
             for item in nutrients:
-                natureNutrient = NatureNutrient.query.get(item.natureID)
+                # natureNutrient = NatureNutrient.query.get(item.natureID)
                 list_nutrients.append({
                     "nutrientID": item.nutrientID,
                     "nutrientName": item.nutrientName,
-                    "natureNutrient": natureNutrient.natureName if natureNutrient else None,
+                    "natureID": nutrient.natureID if nutrient.natureID else None,
                     "description": item.description if item.description else None,
                     "needed": item.needed,
                     "function": item.function,
@@ -133,12 +134,12 @@ def update_nutrient_by_id_service(id):
 
                     db.session.commit()
 
-                    natureNutrient = NatureNutrient.query.get(nutrient.natureID)
+                    # natureNutrient = NatureNutrient.query.get(nutrient.natureID)
 
                     return jsonify({
                         "nutrientID": nutrient.nutrientID,
                         "nutrientName": nutrient.nutrientName,
-                        "natureNutrient": natureNutrient.natureName if natureNutrient else None,
+                        "natureID": nutrient.natureID if nutrient.natureID else None,
                         "description": nutrient.description if nutrient.description else None,
                         "needed": nutrient.needed,
                         "function": nutrient.function,
@@ -197,12 +198,12 @@ def get_nutrients_by_natureNutrient_service(natureNutrientName):
         if nutrients:
             list_nutrients = []
             for item in nutrients:
-                natureNutrient = NatureNutrient.query.get(item.natureID)
+                # natureNutrient = NatureNutrient.query.get(item.natureID)
 
                 list_nutrients.append({
                     "nutrientID": item.nutrientID,
                     "nutrientName": item.nutrientName,
-                    "natureNutrient": natureNutrient.natureName if natureNutrient else None,
+                    "natureID": nutrient.natureID if nutrient.natureID else None,
                     "description": item.description if item.description else None,
                     "needed": item.needed,
                     "function": item.function,
