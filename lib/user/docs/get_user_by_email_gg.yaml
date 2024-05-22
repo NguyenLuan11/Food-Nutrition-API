@@ -1,9 +1,14 @@
-Get User by email
+Get User by email Google
 ---
 tags:
   - USER
 
 parameters:
+  - in: path
+    name: userName
+    description: The user name of user which you want to find.
+    required: true
+
   - in: path
     name: email
     description: The user's email of user which you want to find.

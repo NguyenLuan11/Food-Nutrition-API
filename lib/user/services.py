@@ -248,10 +248,14 @@ def get_user_by_name_service(userName):
         return jsonify({"message": "Request error!"}), 400
 
 
-def get_user_by_email_service(email):
+def get_user_by_email_gg_service(userName, email):
     try:
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(userName=userName, email=email).first()
         if user:
+            # Tạo Access Token và Refresh Token
+            access_token = create_access_token(identity=user.userName, additional_claims={'role': 'user'})
+            refresh_token = create_refresh_token(identity=user.userName, additional_claims={'role': 'user'})
+
             list_user_bmi = get_list_user_bmi_by_userID(user.userID)
 
             return jsonify({
@@ -266,7 +270,9 @@ def get_user_by_email_service(email):
                 "state": user.state,
                 "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
-                "list_user_bmi": list_user_bmi if list_user_bmi else []
+                "list_user_bmi": list_user_bmi if list_user_bmi else [],
+                "access_token": access_token,
+                "refresh_token": refresh_token
             }), 200
         else:
             return jsonify({"message": "Not found user!"}), 404
