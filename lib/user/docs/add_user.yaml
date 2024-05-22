@@ -1,0 +1,51 @@
+Add new User
+---
+tags:
+  - USER
+parameters:
+  - in: body
+    name: body
+    description: The body must contain information's data of the user.
+    required: true
+    schema:
+      type: object
+      required:
+        - "userName"
+        - "fullName"
+        - "image"
+        - "password"
+        - "dateBirth"
+        - "email"
+        - "phone"
+        - "address"
+      properties:
+        userName:
+          type: "string"
+          example: "Johnny"
+        fullName:
+          type: "string"
+          example: "Johnny Deep"
+        image:
+          type: "text"
+          example: "string base64"
+        password:
+          type: "string"
+          example: "12345"
+        dateBirth:
+          type: "date"
+          example: "1985-05-17"
+        email:
+          type: "string"
+          example: "johnny@gmail.com"
+        phone:
+          type: "string"
+          example: "095664783"
+        address:
+          type: "string"
+          example: "New York"
+responses:
+  200:
+    description: When added successfully new user.
+
+  400:
+    description: Fails to add new user due to bad request data.

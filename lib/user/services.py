@@ -140,6 +140,56 @@ def register_user_service():
         return jsonify({"message": "Register error!"}), 400
 
 
+def add_user_service():
+    data = request.json
+    if data and all(key in data for key in ('userName', 'fullName', 'image', 'password', 'dateBirth', 'email',
+                                            'phone', 'address')) \
+            and data['userName'] and data['email'] \
+            and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "" \
+            and data['fullName'] != "" and data['image'] != "" and data['phone'] != "" and data['address'] != "":
+        userName = data['userName']
+        email = data['email']
+
+        password = data['password'] if data['password'] else None
+        date_list = data['dateBirth'].split('-') if data['dateBirth'] else None
+        dateBirth = None
+        if date_list:
+            dateBirth = date(int(date_list[0]), int(date_list[1]), int(date_list[2]))
+        fullName = data['fullName'] if data['fullName'] else None
+        image = data['image'] if data['image'] else None
+        phone = data['phone'] if data['phone'] else None
+        address = data['address'] if data['address'] else None
+
+        try:
+            new_user = User(userName=userName, fullName=fullName, image=image, password=password, dateBirth=dateBirth,
+                            email=email, phone=phone, address=address)
+
+            db.session.add(new_user)
+            db.session.commit()
+
+            list_user_bmi = get_list_user_bmi_by_userID(new_user.userID)
+
+            return jsonify({
+                "userID": new_user.userID,
+                "userName": new_user.userName,
+                "fullName": new_user.fullName if new_user.fullName else None,
+                "image": new_user.image if new_user.image else None,
+                "dateBirth": new_user.dateBirth.strftime("%Y-%m-%d") if new_user.dateBirth else None,
+                "email": new_user.email,
+                "phone": new_user.phone if new_user.phone else None,
+                "address": new_user.address if new_user.address else None,
+                "state": new_user.state,
+                "dateJoining": new_user.dateJoining.strftime("%Y-%m-%d"),
+                "modified_date": new_user.modified_date.strftime("%Y-%m-%d") if new_user.modified_date else None,
+                "list_user_bmi": list_user_bmi if list_user_bmi else []
+            }), 200
+        except IndentationError:
+            db.session.rollback()
+            return jsonify({"message": "Register Failed!"}), 400
+    else:
+        return jsonify({"message": "Register error!"}), 400
+
+
 def update_image_avt_user_by_id_service(id):
     try:
         user = User.query.get(id)
