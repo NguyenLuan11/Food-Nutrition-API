@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from .services import register_user_service, get_all_user_service, get_user_by_id_service, \
     update_user_by_id_service, delete_user_by_id_service, login_user_service, refresh_token_service, \
-    update_image_avt_user_by_id_service, update_state_user_by_id_service, get_user_by_name_service
+    update_image_avt_user_by_id_service, update_state_user_by_id_service, get_user_by_name_service, get_user_by_email_service
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt
 
@@ -63,6 +63,12 @@ def get_user_by_id(id):
 @swag_from("docs/get_user_by_name.yaml")
 def get_user_by_name(userName):
     return get_user_by_name_service(userName)
+
+
+@user.route("/user/<string:userName>", methods=["GET"])
+@swag_from("docs/get_user_by_email.yaml")
+def get_user_by_email(email):
+    return get_user_by_email_service(email)
 
 
 @user.route("/users", methods=["GET"])

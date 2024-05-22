@@ -1,0 +1,17 @@
+Get User by email
+---
+tags:
+  - USER
+
+parameters:
+  - in: path
+    name: email
+    description: The user's email of user which you want to find.
+    required: true
+
+responses:
+  200:
+    description: Get successfully user.
+
+  404:
+    description: Not found user by email.

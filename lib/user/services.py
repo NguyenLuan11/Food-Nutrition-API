@@ -50,7 +50,7 @@ def login_user_service():
                 "userName": user.userName,
                 "fullName": user.fullName if user.fullName else None,
                 "image": user.image if user.image else None,
-                "dateBirth": user.dateBirth.strftime("%Y-%m-%d"),
+                "dateBirth": user.dateBirth.strftime("%Y-%m-%d") if user.dateBirth else None,
                 "email": user.email,
                 "phone": user.phone if user.phone else None,
                 "address": user.address if user.address else None,
@@ -85,7 +85,7 @@ def get_user_infor_by_access_token_service():
             "userName": user.userName,
             "fullName": user.fullName if user.fullName else None,
             "image": user.image if user.image else None,
-            "dateBirth": user.dateBirth.strftime("%Y-%m-%d"),
+            "dateBirth": user.dateBirth.strftime("%Y-%m-%d") if user.dateBirth else None,
             "email": user.email,
             "phone": user.phone if user.phone else None,
             "address": user.address if user.address else None,
@@ -99,13 +99,17 @@ def get_user_infor_by_access_token_service():
 def register_user_service():
     data = request.json
     if data and all(key in data for key in ('userName', 'password', 'dateBirth', 'email')) \
-            and data['userName'] and data['password'] and data['dateBirth'] and data['email'] \
+            and data['userName'] and data['email'] \
             and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "":
         userName = data['userName']
-        password = data['password']
-        date_list = data['dateBirth'].split('-')
-        dateBirth = date(int(date_list[0]), int(date_list[1]), int(date_list[2]))
         email = data['email']
+
+        password = data['password'] if data['password'] else None
+        date_list = data['dateBirth'].split('-') if data['dateBirth'] else None
+        dateBirth = None
+        if date_list:
+            dateBirth = date(int(date_list[0]), int(date_list[1]), int(date_list[2]))
+
         try:
             new_user = User(userName=userName, fullName=None, image=None, password=password, dateBirth=dateBirth,
                             email=email, phone=None, address=None)
@@ -120,7 +124,7 @@ def register_user_service():
                 "userName": new_user.userName,
                 "fullName": new_user.fullName if new_user.fullName else None,
                 "image": new_user.image if new_user.image else None,
-                "dateBirth": new_user.dateBirth.strftime("%Y-%m-%d"),
+                "dateBirth": new_user.dateBirth.strftime("%Y-%m-%d") if new_user.dateBirth else None,
                 "email": new_user.email,
                 "phone": new_user.phone if new_user.phone else None,
                 "address": new_user.address if new_user.address else None,
@@ -201,7 +205,7 @@ def get_user_by_id_service(id):
                 "userName": user.userName,
                 "fullName": user.fullName if user.fullName else None,
                 "image": user.image if user.image else None,
-                "dateBirth": user.dateBirth.strftime("%Y-%m-%d"),
+                "dateBirth": user.dateBirth.strftime("%Y-%m-%d") if user.dateBirth else None,
                 "email": user.email,
                 "phone": user.phone if user.phone else None,
                 "address": user.address if user.address else None,
@@ -228,7 +232,34 @@ def get_user_by_name_service(userName):
                 "userName": user.userName,
                 "fullName": user.fullName if user.fullName else None,
                 "image": user.image if user.image else None,
-                "dateBirth": user.dateBirth.strftime("%Y-%m-%d"),
+                "dateBirth": user.dateBirth.strftime("%Y-%m-%d") if user.dateBirth else None,
+                "email": user.email,
+                "phone": user.phone if user.phone else None,
+                "address": user.address if user.address else None,
+                "state": user.state,
+                "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
+                "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
+                "list_user_bmi": list_user_bmi if list_user_bmi else []
+            }), 200
+        else:
+            return jsonify({"message": "Not found user!"}), 404
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
+def get_user_by_email_service(email):
+    try:
+        user = User.query.filter_by(email=email).first()
+        if user:
+            list_user_bmi = get_list_user_bmi_by_userID(user.userID)
+
+            return jsonify({
+                "userID": user.userID,
+                "userName": user.userName,
+                "fullName": user.fullName if user.fullName else None,
+                "image": user.image if user.image else None,
+                "dateBirth": user.dateBirth.strftime("%Y-%m-%d") if user.dateBirth else None,
                 "email": user.email,
                 "phone": user.phone if user.phone else None,
                 "address": user.address if user.address else None,
@@ -257,7 +288,7 @@ def get_all_user_service():
                     "userName": user.userName,
                     "fullName": user.fullName if user.fullName else None,
                     "image": user.image if user.image else None,
-                    "dateBirth": user.dateBirth.strftime("%Y-%m-%d"),
+                    "dateBirth": user.dateBirth.strftime("%Y-%m-%d") if user.dateBirth else None,
                     "email": user.email,
                     "phone": user.phone if user.phone else None,
                     "address": user.address if user.address else None,
@@ -280,15 +311,15 @@ def update_user_by_id_service(id):
         data = request.json
         if user:
             if data and all(key in data for key in ('userName', 'fullName', 'password', 'dateBirth', 'email', 'phone',
-                                                    'address')) and data['userName'] and data['password'] and \
-                    data['dateBirth'] and data['email'] and data['userName'] != "" and data['password'] != "" \
-                    and data['dateBirth'] != "" and data['email'] != "":
+                'address')) and data['userName'] and data['email'] \
+                and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "":
                 try:
                     user.userName = data['userName']
                     user.fullName = data['fullName'] if data['fullName'] else None
-                    user.password = data['password']
-                    date_list = data['dateBirth'].split('-')
-                    user.dateBirth = date(int(date_list[0]), int(date_list[1]), int(date_list[2]))
+                    user.password = data['password'] if data['password'] else None
+                    date_list = data['dateBirth'].split('-') if data['dateBirth'] else None
+                    if date_list:
+                        user.dateBirth = date(int(date_list[0]), int(date_list[1]), int(date_list[2]))
                     user.email = data['email']
                     user.phone = data['phone'] if data['phone'] else None
                     user.address = data['address'] if data['address'] else None
@@ -302,7 +333,7 @@ def update_user_by_id_service(id):
                         "userName": user.userName,
                         "fullName": user.fullName,
                         "image": user.image if user.image else None,
-                        "dateBirth": user.dateBirth.strftime("%Y-%m-%d"),
+                        "dateBirth": user.dateBirth.strftime("%Y-%m-%d") if user.dateBirth else None,
                         "email": user.email,
                         "phone": user.phone,
                         "address": user.address,

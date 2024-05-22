@@ -14,4 +14,4 @@ responses:
     description: Get successfully user.
 
   404:
-    description: Not found user by id.
+    description: Not found user by name.
