@@ -65,7 +65,7 @@ def get_user_by_name(userName):
     return get_user_by_name_service(userName)
 
 
-@user.route("/user/<string:userName>", methods=["GET"])
+@user.route("/user/<string:email>", methods=["GET"])
 @swag_from("docs/get_user_by_email.yaml")
 def get_user_by_email(email):
     return get_user_by_email_service(email)
