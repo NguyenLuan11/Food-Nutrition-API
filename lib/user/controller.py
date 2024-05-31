@@ -38,7 +38,7 @@ def add_user():
     return add_user_service()
 
 
-@user.route("/upload-avt", methods=["PUT"])
+@user.route("/upload-avt/<int:id>", methods=["PUT"])
 @jwt_required()
 @swag_from("docs/update_image_avt_user_by_id.yaml")
 def update_image_avt_user_by_id(id):
