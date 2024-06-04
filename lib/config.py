@@ -15,4 +15,4 @@ SWAGGER = {
 }
 
 JWT_SECRET_KEY = SECRET_KEY
-JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
+JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=35)
