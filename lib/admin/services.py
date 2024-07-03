@@ -16,11 +16,11 @@ def count_all_items_service():
         categories = CategoryArticle.query.all()
 
         return jsonify({
-            "foods": len(foods),
-            "users": len(users),
-            "articles": len(articles),
-            "nutrients": len(nutrients),
-            "categories": len(categories),
+            "foods": len(foods) if foods else 0,
+            "users": len(users) if users else 0,
+            "articles": len(articles) if articles else 0,
+            "nutrients": len(nutrients) if nutrients else 0,
+            "categories": len(categories) if categories else 0,
         }), 200
     except IndentationError:
         db.session.rollback()
