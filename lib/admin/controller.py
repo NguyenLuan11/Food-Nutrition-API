@@ -1,10 +1,16 @@
 from flask import Blueprint, jsonify
 from .services import add_admin_service, get_admin_by_id_service, get_all_admin_service, update_admin_by_id_service, \
-    delete_admin_by_id_service, login_admin_service, refresh_token_service
+    delete_admin_by_id_service, login_admin_service, refresh_token_service, count_all_items_service
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt
 
 admin = Blueprint("admin", __name__, url_prefix="/api/admin-management")
+
+
+@admin.route("/count_all_items", methods=["GET"])
+@swag_from("docs/count_all_items.yaml")
+def count_all_items():
+    return count_all_items_service()
 
 
 @admin.route("/login", methods=["POST"])

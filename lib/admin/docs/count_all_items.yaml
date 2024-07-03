@@ -1,0 +1,11 @@
+Count all items
+---
+tags:
+  - ADMIN
+
+responses:
+  200:
+    description: Count all items successful.
+
+  400:
+    description: Count all items failed.

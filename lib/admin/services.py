@@ -1,10 +1,30 @@
-from ..model import db, Admin
+from ..model import db, Admin, Foods, Article, User, Nutrients, CategoryArticle
 from ..food_nutrition_ma import AdminSchema
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 
 admin_schema = AdminSchema()
 admins_schema = AdminSchema(many=True)
+
+
+def count_all_items_service():
+    try:
+        foods = Foods.query.all()
+        users = User.query.all()
+        articles = Article.query.all()
+        nutrients = Nutrients.query.all()
+        categories = CategoryArticle.query.all()
+
+        return jsonify({
+            "foods": len(foods),
+            "users": len(users),
+            "articles": len(articles),
+            "nutrients": len(nutrients),
+            "categories": len(categories),
+        }), 200
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
 
 
 def login_admin_service():
