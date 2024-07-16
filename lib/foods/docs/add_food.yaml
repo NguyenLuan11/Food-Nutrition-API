@@ -19,6 +19,7 @@ parameters:
       required:
         - "foodName"
         - "image"
+        - "kcalOn100g"
         - "nutritionValue"
         - "preservation"
         - "note"
@@ -28,6 +29,9 @@ parameters:
           example: "Chuối"
         image:
           type: "binary"
+        kcalOn100g:
+          type: "float"
+          example: 89
         nutritionValue:
           type: "text"
           example: "Các thành phần dinh dưỡng trong chuối có kích cỡ trung bình (100 gam): 89 calo, 75% nước, 

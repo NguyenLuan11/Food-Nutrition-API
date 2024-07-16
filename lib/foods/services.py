@@ -10,15 +10,17 @@ foods = FoodsSchema(many=True)
 
 def add_foods_service():
     data = request.json
-    if data and all(key in data for key in ('foodName', 'image', 'nutritionValue', 'preservation', 'note')) \
-        and data['foodName'] and data['nutritionValue'] and data['foodName'] != "" and data['nutritionValue'] != "":
+    if data and all(key in data for key in ('foodName', 'image', 'kcalOn100g', 'nutritionValue', 'preservation', 'note')) \
+        and data['foodName'] and data['kcalOn100g'] and data['nutritionValue'] \
+            and data['foodName'] != "" and data['nutritionValue'] != "":
         foodName = data['foodName']
         image = data['image'] if data['image'] else None
+        kcalOn100g = data['kcalOn100g']
         nutritionValue = data['nutritionValue']
         preservation = data['preservation'] if data['preservation'] else None
         note = data['note'] if data['note'] else None
         try:
-            new_food = Foods(foodName=foodName, image=image, nutritionValue=nutritionValue,
+            new_food = Foods(foodName=foodName, image=image, kcalOn100g=kcalOn100g, nutritionValue=nutritionValue,
                              preservation=preservation, note=note)
             db.session.add(new_food)
             db.session.commit()
@@ -27,6 +29,7 @@ def add_foods_service():
                 "foodID": new_food.foodID,
                 "foodName": new_food.foodName,
                 "image": new_food.image if new_food.image else None,
+                "kcalOn100g": new_food.kcalOn100g,
                 "nutritionValue": new_food.nutritionValue,
                 "preservation": new_food.preservation if new_food.preservation else None,
                 "note": new_food.note if new_food.note else None,
@@ -48,6 +51,7 @@ def get_food_by_id_service(id):
                 "foodID": food.foodID,
                 "foodName": food.foodName,
                 "image": food.image if food.image else None,
+                "kcalOn100g": food.kcalOn100g,
                 "nutritionValue": food.nutritionValue,
                 "preservation": food.preservation if food.preservation else None,
                 "note": food.note if food.note else None,
@@ -71,6 +75,7 @@ def get_all_foods_service():
                     "foodID": food.foodID,
                     "foodName": food.foodName,
                     "image": food.image if food.image else None,
+                    "kcalOn100g": food.kcalOn100g,
                     "nutritionValue": food.nutritionValue,
                     "preservation": food.preservation if food.preservation else None,
                     "note": food.note if food.note else None,
@@ -90,12 +95,13 @@ def update_food_by_id_service(id):
         food = Foods.query.get(id)
         data = request.json
         if food:
-            if data and all(key in data for key in ('foodName', 'image', 'nutritionValue', 'preservation', 'note')) \
-                    and data['foodName'] and data['nutritionValue'] \
+            if data and all(key in data for key in ('foodName', 'image', 'kcalOn100g', 'nutritionValue', 'preservation', 'note')) \
+                and data['foodName'] and data['kcalOn100g'] and data['nutritionValue'] \
                     and data['foodName'] != "" and data['nutritionValue'] != "":
                 try:
                     food.foodName = data['foodName']
                     food.image = data['image'] if data['image'] else None
+                    food.kcalOn100g = data['kcalOn100g']
                     food.nutritionValue = data['nutritionValue']
                     food.preservation = data['preservation'] if data['preservation'] else None
                     food.note = data['note'] if data['note'] else None
@@ -106,6 +112,7 @@ def update_food_by_id_service(id):
                         "foodID": food.foodID,
                         "foodName": food.foodName,
                         "image": food.image if food.image else None,
+                        "kcalOn100g": food.kcalOn100g,
                         "nutritionValue": food.nutritionValue,
                         "preservation": food.preservation if food.preservation else None,
                         "note": food.note if food.note else None,

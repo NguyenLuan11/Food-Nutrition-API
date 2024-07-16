@@ -21,7 +21,7 @@ class UserBMISchema(ma.Schema):
 
 class FoodsSchema(ma.Schema):
     class Meta:
-        fields = ('foodID', 'foodName', 'image', 'nutritionValue', 'preservation', 'note',
+        fields = ('foodID', 'foodName', 'image', 'kcalOn100g', 'nutritionValue', 'preservation', 'note',
                   'created_date', 'modified_date')
 
 

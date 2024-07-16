@@ -73,6 +73,7 @@ class Foods(db.Model):
     foodID = db.Column(db.Integer, primary_key=True)
     foodName = db.Column(db.String(50), nullable=False)
     image = db.Column(db.Text)
+    kcalOn100g = db.Column(db.Float, nullable=False)
     nutritionValue = db.Column(db.Text, nullable=False)
     preservation = db.Column(db.Text)
     note = db.Column(db.Text)
