@@ -82,9 +82,10 @@ class Foods(db.Model):
 
     food_nutrient = db.relationship('FoodNutrient', backref='foods', cascade="all, delete-orphan")
 
-    def __init__(self, foodName, image, nutritionValue, preservation, note):
+    def __init__(self, foodName, image, kcalOn100g, nutritionValue, preservation, note):
         self.foodName = foodName
         self.image = image
+        self.kcalOn100g = kcalOn100g
         self.nutritionValue = nutritionValue
         self.preservation = preservation
         self.note = note
