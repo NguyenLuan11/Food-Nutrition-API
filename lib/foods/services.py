@@ -117,7 +117,7 @@ def update_food_by_id_service(id):
                         "preservation": food.preservation if food.preservation else None,
                         "note": food.note if food.note else None,
                         "created_date": food.created_date.strftime("%Y-%m-%d"),
-                        "modified_date": food.modified_date.strftime("%Y-%m-%d")
+                        "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
                     }), 200
                 except IndentationError:
                     db.session.rollback()
