@@ -31,8 +31,8 @@ def login_admin_service():
     data = request.json
     if data and ('adminName' in data) and ('password' in data) and data['adminName'] and data['password'] \
             and data['adminName'] != "" and data['password'] != "":
-        adminName = data['adminName']
-        password = data['password']
+        adminName = data['adminName'].strip()
+        password = data['password'].strip()
 
         admin = Admin.query.filter_by(adminName=adminName, password=password).first()
 
@@ -70,11 +70,11 @@ def add_admin_service():
     if data and all(key in data for key in ('adminName', 'fullName', 'image', 'password', 'email')) \
         and data['adminName'] and data['password'] and data['email'] \
             and data['adminName'] != "" and data['password'] != "" and data['email'] != "":
-        adminName = data['adminName']
+        adminName = data['adminName'].strip()
         fullName = data['fullName'] if data['fullName'] else None
         image = data['image'] if data['image'] else None
-        password = data['password']
-        email = data['email']
+        password = data['password'].strip()
+        email = data['email'].strip()
         try:
             new_admin = Admin(adminName=adminName, fullName=fullName, image=image, password=password, email=email)
             db.session.add(new_admin)
@@ -148,11 +148,11 @@ def update_admin_by_id_service(id):
                 and data['adminName'] and data['password'] and data['email'] \
                     and data['adminName'] != "" and data['password'] != "" and data['email'] != "":
                 try:
-                    admin.adminName = data['adminName']
+                    admin.adminName = data['adminName'].strip()
                     admin.fullName = data['fullName'] if data['fullName'] else None
                     admin.image = data['image'] if data['image'] else None
-                    admin.password = data['password']
-                    admin.email = data['email']
+                    admin.password = data['password'].strip()
+                    admin.email = data['email'].strip()
 
                     db.session.commit()
 

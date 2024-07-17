@@ -33,8 +33,8 @@ def login_user_service():
     data = request.json
     if data and all(key in data for key in ('userName', 'password')) and data['userName'] and data['password'] \
             and data['userName'] != "" and data['password'] != "":
-        userName = data['userName']
-        password = data['password']
+        userName = data['userName'].strip()
+        password = data['password'].strip()
 
         user = User.query.filter_by(userName=userName, password=password).first()
 
@@ -101,10 +101,10 @@ def register_user_service():
     if data and all(key in data for key in ('userName', 'password', 'dateBirth', 'email')) \
             and data['userName'] and data['email'] \
             and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "":
-        userName = data['userName']
-        email = data['email']
+        userName = data['userName'].strip()
+        email = data['email'].strip()
 
-        password = data['password'] if data['password'] else None
+        password = data['password'].strip() if data['password'] else None
         date_list = data['dateBirth'].split('-') if data['dateBirth'] else None
         dateBirth = None
         if date_list:
@@ -147,10 +147,10 @@ def add_user_service():
             and data['userName'] and data['email'] \
             and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "" \
             and data['fullName'] != "" and data['image'] != "" and data['phone'] != "" and data['address'] != "":
-        userName = data['userName']
-        email = data['email']
+        userName = data['userName'].strip()
+        email = data['email'].strip()
 
-        password = data['password'] if data['password'] else None
+        password = data['password'].strip() if data['password'] else None
         date_list = data['dateBirth'].split('-') if data['dateBirth'] else None
         dateBirth = None
         if date_list:
@@ -370,9 +370,9 @@ def update_user_by_id_service(id):
                 'address')) and data['userName'] and data['email'] \
                 and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "":
                 try:
-                    user.userName = data['userName']
+                    user.userName = data['userName'].strip()
                     user.fullName = data['fullName'] if data['fullName'] else None
-                    user.password = data['password'] if data['password'] else None
+                    user.password = data['password'].strip() if data['password'] else None
                     date_list = data['dateBirth'].split('-') if data['dateBirth'] else None
                     if date_list:
                         user.dateBirth = date(int(date_list[0]), int(date_list[1]), int(date_list[2]))
