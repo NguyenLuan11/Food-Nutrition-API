@@ -366,13 +366,12 @@ def update_user_by_id_service(id):
         user = User.query.get(id)
         data = request.json
         if user:
-            if data and all(key in data for key in ('userName', 'fullName', 'password', 'dateBirth', 'email', 'phone',
-                'address')) and data['userName'] and data['email'] \
-                and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "":
+            if data and all(key in data for key in ('userName', 'fullName', 'dateBirth', 'email', 'phone', 'address')) \
+                and data['userName'] and data['email'] \
+                    and data['userName'] != "" and data['dateBirth'] != "" and data['email'] != "":
                 try:
                     user.userName = data['userName'].strip()
                     user.fullName = data['fullName'] if data['fullName'] else None
-                    user.password = data['password'].strip() if data['password'] else None
                     date_list = data['dateBirth'].split('-') if data['dateBirth'] else None
                     if date_list:
                         user.dateBirth = date(int(date_list[0]), int(date_list[1]), int(date_list[2]))

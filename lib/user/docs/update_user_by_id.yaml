@@ -17,7 +17,6 @@ parameters:
       required:
         - "userName"
         - "fullName"
-        - "password"
         - "dateBirth"
         - "email"
         - "phone"
@@ -29,9 +28,6 @@ parameters:
         fullName:
           type: "string"
           example: "Johnny Deep"
-        password:
-          type: "string"
-          example: "12345"
         dateBirth:
           type: "date"
           example: "1985-05-17"
