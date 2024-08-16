@@ -24,7 +24,7 @@ def get_list_user_bmi_by_userID(userID):
                 "check_date": user_bmi.check_date.strftime("%Y-%m-%d")
             })
 
-            return list_user_bmi
+        return list_user_bmi
     else:
         return None
 

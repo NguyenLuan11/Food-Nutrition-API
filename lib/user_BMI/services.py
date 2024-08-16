@@ -128,8 +128,7 @@ def delete_userBMI_by_id_service(id):
 
 def get_userBMI_by_userName_service(userName):
     try:
-        user_bmis = UserBMI.query.join(User, UserBMI.userID == User.userID)\
-            .filter(func.lower(User.userName) == userName.lower()).all()
+        user_bmis = UserBMI.query.join(User).filter(func.lower(User.userName) == userName.lower()).all()
         if user_bmis:
             list_userBMIs = []
             for user_bmi in user_bmis:
@@ -142,7 +141,7 @@ def get_userBMI_by_userName_service(userName):
                     "check_date": user_bmi.check_date.strftime("%Y-%m-%d")
                 })
 
-                return jsonify(list_userBMIs), 200
+            return jsonify(list_userBMIs), 200
         else:
             return jsonify({"message": "Not found user's BMI!"}), 404
     except IndentationError:
