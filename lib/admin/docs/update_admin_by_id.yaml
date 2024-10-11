@@ -17,8 +17,6 @@ parameters:
       required:
         - "adminName"
         - "fullName"
-        - "image"
-        - "password"
         - "email"
       properties:
         adminName:
@@ -27,12 +25,6 @@ parameters:
         fullName:
           type: "string"
           example: "Johnny Deep"
-        image:
-          type: "text"
-          example: "string base64"
-        password:
-          type: "string"
-          example: "12345"
         email:
           type: "string"
           example: "johnny@gmail.com"

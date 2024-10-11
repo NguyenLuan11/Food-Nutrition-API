@@ -144,14 +144,12 @@ def update_admin_by_id_service(id):
         admin = Admin.query.get(id)
         data = request.json
         if admin:
-            if data and all(key in data for key in ('adminName', 'fullName', 'image', 'password', 'email')) \
-                and data['adminName'] and data['password'] and data['email'] \
-                    and data['adminName'] != "" and data['password'] != "" and data['email'] != "":
+            if data and all(key in data for key in ('adminName', 'fullName', 'email')) \
+                and data['adminName'] and data['email'] \
+                    and data['adminName'] != "" and data['email'] != "":
                 try:
                     admin.adminName = data['adminName'].strip()
-                    admin.fullName = data['fullName'] if data['fullName'] else None
-                    admin.image = data['image'] if data['image'] else None
-                    admin.password = data['password'].strip()
+                    admin.fullName = data['fullName'].strip() if data['fullName'] else None
                     admin.email = data['email'].strip()
 
                     db.session.commit()
