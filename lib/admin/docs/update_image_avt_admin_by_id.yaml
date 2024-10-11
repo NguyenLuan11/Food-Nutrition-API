@@ -1,7 +1,7 @@
-Update User's avatar
+Update Admin's avatar
 ---
 tags:
-  - USER
+  - ADMIN
 description: Endpoint to update user's avatar by using a valid access token.
 parameters:
   - in: header
@@ -13,12 +13,12 @@ parameters:
 
   - in: path
     name: id
-    description: The id of user which you want to update
+    description: The id of admin which you want to update
     required: true
 
   - in: body
     name: body
-    description: The body should contain image type base64 of the user.
+    description: The body should contain image type base64 of the admin.
     required: true
     schema:
       type: object
@@ -30,13 +30,13 @@ parameters:
           example: "string base64"
 responses:
   200:
-    description: When updated successfully user's avatar.
+    description: When updated successfully admin's avatar.
 
   400:
-    description: Fails to update user's avatar due to bad request data.
+    description: Fails to update admin's avatar due to bad request data.
 
   403:
     description: Permission denied
 
   404:
-    description: User not found
+    description: Admin not found

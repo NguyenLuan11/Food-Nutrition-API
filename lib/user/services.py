@@ -207,9 +207,9 @@ def update_image_avt_user_by_id_service(id):
                     db.session.rollback()
                     return jsonify({"message": "Update user's avatar failed!"}), 400
             else:
-                return {"message": "No image provided!"}, 400
+                return jsonify({"message": "No image provided!"}), 400
         else:
-            return {"message": "User not found!"}, 404
+            return jsonify({"message": "User not found!"}), 404
     except IndentationError:
         db.session.rollback()
         return jsonify({"message": "Request error!"}), 400

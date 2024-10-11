@@ -173,6 +173,31 @@ def update_admin_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+def update_image_avt_admin_by_id_service(id):
+    try:
+        admin = Admin.query.get(id)
+        data = request.json
+        if admin:
+            if data and ('image' in data) and data['image'] and data['image'] != "":
+                try:
+                    admin.image = data['image']
+                    db.session.commit()
+
+                    return jsonify({
+                        "image": admin.image if admin.image else None
+                    }), 200
+                except IndentationError:
+                    db.session.rollback()
+                    return jsonify({"message": "Can not update avatar admin!"}), 400
+            else:
+                return jsonify({"message": "No image provided!"}), 400
+        else:
+            return jsonify({"message": "Not found admin!"}), 404
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
 def delete_admin_by_id_service(id):
     try:
         admin = Admin.query.get(id)
