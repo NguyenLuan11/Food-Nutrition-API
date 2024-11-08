@@ -1,4 +1,6 @@
 import os
+from zeroconf import ServiceInfo, Zeroconf
+import socket
 from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 from flasgger import Swagger, swag_from
@@ -15,6 +17,41 @@ from .nature_nutrient.controller import natureNutrient
 from .nutrients.controller import nutrients
 from .user.controller import user
 from .user_BMI.controller import userBMI
+
+
+# Automation get local IP address
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # Connect to an external address to determine the local IP (without actually sending the packet)
+        s.connect(("8.8.8.8", 80))
+        ip_address = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip_address
+
+
+# Register mDNS service when server Flask start
+def register_mdns_service():
+    zeroconf = Zeroconf()
+    service_type = "_http._tcp.local."
+    service_name = "Food_Nutrition_API._http._tcp.local."
+    ip_address = socket.inet_aton(get_local_ip())  # Automation get local IP address
+    port = 5007  # Port Flask server
+
+    # Create information for service mDNS
+    service_info = ServiceInfo(
+        service_type,
+        service_name,
+        addresses=[ip_address],
+        port=port,
+        properties={},
+        server="fn-api.local."
+    )
+
+    # Register service
+    zeroconf.register_service(service_info)
+    print("Service registered as fn-api.local with IP:", get_local_ip())
 
 
 def create_app(config_file="config.py"):

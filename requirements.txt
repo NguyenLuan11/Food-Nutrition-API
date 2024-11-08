@@ -14,3 +14,4 @@ flasgger>=0.9.5
 Flask-JWT-Extended>=4.2.3
 PyJWT>=2.1.0
 PyYAML>=5.4.1
+zeroconf
