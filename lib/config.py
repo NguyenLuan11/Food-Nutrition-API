@@ -16,3 +16,11 @@ SWAGGER = {
 
 JWT_SECRET_KEY = SECRET_KEY
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=35)
+
+UPLOAD_FOLDER_ADMIN = "images/admin"
+UPLOAD_FOLDER_USERS = "images/users"
+UPLOAD_FOLDER_FOODS = "images/foods"
+UPLOAD_FOLDER_NUTRIENTS = "images/nutrients"
+UPLOAD_FOLDER_ARTICLES = "images/articles"
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'tiff'}

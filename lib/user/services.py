@@ -1,13 +1,18 @@
 from ..model import db, User, UserBMI
 from ..food_nutrition_ma import UserSchema
-from flask import request, jsonify
+from flask import request, jsonify, send_from_directory, abort
 from sqlalchemy.sql import func
 from datetime import date, datetime
 from sqlalchemy import event
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
+from werkzeug.utils import secure_filename
+import os
+from ..config import ALLOWED_EXTENSIONS
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
+
+UPLOAD_FOLDER_USERS = os.path.join(os.getcwd(), "images/users")
 
 
 def get_list_user_bmi_by_userID(userID):
@@ -190,29 +195,58 @@ def add_user_service():
         return jsonify({"message": "Register error!"}), 400
 
 
+# Hàm kiểm tra định dạng file hợp lệ
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 def update_image_avt_user_by_id_service(id):
     try:
         user = User.query.get(id)
-        data = request.json
+        data = request.files
         if user:
-            if data and ('image' in data) and data['image'] and data['image'] != "":
+            if 'picAvt' not in data:
+                return jsonify({"message": "No image provided!"}), 400
+
+            file = data['picAvt']
+
+            # Kiểm tra nếu file không có tên
+            if file.filename == '':
+                return jsonify({"message": "No selected file"}), 400
+
+            # Kiểm tra loại file
+            if file and allowed_file(file.filename):
+                fileName = secure_filename(file.filename)  # Đảm bảo tên file an toàn
+                file_path = os.path.join(UPLOAD_FOLDER_USERS, fileName)
+
+                # Lưu file vào thư mục
+                file.save(file_path)
+
                 try:
-                    user.image = data['image']
+                    # Lưu thông tin ảnh vào database
+                    user.image = fileName
                     db.session.commit()
 
                     return jsonify({
-                        'image': user.image
+                        "image": user.image if user.image else None
                     }), 200
                 except IndentationError:
                     db.session.rollback()
-                    return jsonify({"message": "Update user's avatar failed!"}), 400
-            else:
-                return jsonify({"message": "No image provided!"}), 400
+                    return jsonify({"message": "Can not update avatar user!"}), 400
         else:
-            return jsonify({"message": "User not found!"}), 404
+            return jsonify({"message": "Not found user!"}), 404
     except IndentationError:
         db.session.rollback()
         return jsonify({"message": "Request error!"}), 400
+
+
+# Tải ảnh trực tiếp từ thư mục lưu trữ
+def get_image_service(fileName):
+    try:
+        return send_from_directory(UPLOAD_FOLDER_USERS, fileName)
+    except FileNotFoundError:
+        abort(404, description="Image not found")
 
 
 def update_state_user_by_id_service(id):

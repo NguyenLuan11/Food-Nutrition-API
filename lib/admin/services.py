@@ -1,10 +1,15 @@
 from ..model import db, Admin, Foods, Article, User, Nutrients, CategoryArticle
 from ..food_nutrition_ma import AdminSchema
-from flask import request, jsonify
+from flask import request, jsonify, send_from_directory, abort
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
+from werkzeug.utils import secure_filename
+import os
+from ..config import ALLOWED_EXTENSIONS
 
 admin_schema = AdminSchema()
 admins_schema = AdminSchema(many=True)
+
+UPLOAD_FOLDER_ADMIN = os.path.join(os.getcwd(), "images/admin")
 
 
 def count_all_items_service():
@@ -173,14 +178,37 @@ def update_admin_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# Hàm kiểm tra định dạng file hợp lệ
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 def update_image_avt_admin_by_id_service(id):
     try:
         admin = Admin.query.get(id)
-        data = request.json
+        data = request.files
         if admin:
-            if data and ('image' in data) and data['image'] and data['image'] != "":
+            if 'picAvt' not in data:
+                return jsonify({"message": "No image provided!"}), 400
+
+            file = data['picAvt']
+
+            # Kiểm tra nếu file không có tên
+            if file.filename == '':
+                return jsonify({"message": "No selected file"}), 400
+
+            # Kiểm tra loại file
+            if file and allowed_file(file.filename):
+                fileName = secure_filename(file.filename)  # Đảm bảo tên file an toàn
+                file_path = os.path.join(UPLOAD_FOLDER_ADMIN, fileName)
+
+                # Lưu file vào thư mục
+                file.save(file_path)
+
                 try:
-                    admin.image = data['image']
+                    # Lưu thông tin ảnh vào database
+                    admin.image = fileName
                     db.session.commit()
 
                     return jsonify({
@@ -189,13 +217,19 @@ def update_image_avt_admin_by_id_service(id):
                 except IndentationError:
                     db.session.rollback()
                     return jsonify({"message": "Can not update avatar admin!"}), 400
-            else:
-                return jsonify({"message": "No image provided!"}), 400
         else:
             return jsonify({"message": "Not found admin!"}), 404
     except IndentationError:
         db.session.rollback()
         return jsonify({"message": "Request error!"}), 400
+
+
+# Tải ảnh trực tiếp từ thư mục lưu trữ
+def get_image_service(fileName):
+    try:
+        return send_from_directory(UPLOAD_FOLDER_ADMIN, fileName)
+    except FileNotFoundError:
+        abort(404, description="Image not found")
 
 
 def delete_admin_by_id_service(id):

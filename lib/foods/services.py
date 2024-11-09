@@ -1,24 +1,54 @@
-from flask import request, jsonify
+from flask import request, jsonify, send_from_directory, abort
 from sqlalchemy import event
 from sqlalchemy.sql import func
 from ..model import db, Foods, FoodNutrient
 from ..food_nutrition_ma import FoodsSchema
+from werkzeug.utils import secure_filename
+import os
+from ..config import ALLOWED_EXTENSIONS
 
 food = FoodsSchema()
 foods = FoodsSchema(many=True)
 
+UPLOAD_FOLDER_FOODS = os.path.join(os.getcwd(), "images/foods")
+
+
+# Hàm kiểm tra định dạng file hợp lệ
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 def add_foods_service():
     data = request.json
-    if data and all(key in data for key in ('foodName', 'image', 'kcalOn100g', 'nutritionValue', 'preservation', 'note')) \
+    uploadImg = request.files
+    if data and all(key in data for key in ('foodName', 'kcalOn100g', 'nutritionValue', 'preservation', 'note')) \
         and data['foodName'] and data['kcalOn100g'] and data['nutritionValue'] \
             and data['foodName'] != "" and data['nutritionValue'] != "":
         foodName = data['foodName']
-        image = data['image'] if data['image'] else None
         kcalOn100g = data['kcalOn100g']
         nutritionValue = data['nutritionValue']
         preservation = data['preservation'] if data['preservation'] else None
         note = data['note'] if data['note'] else None
+
+        image = None
+        if 'picFood' in uploadImg:
+            file = uploadImg['picFood']
+
+            # Kiểm tra nếu file không có tên
+            if file.filename == '':
+                return jsonify({"message": "No selected file"}), 400
+
+            # Kiểm tra loại file
+            if file and allowed_file(file.filename):
+                fileName = secure_filename(file.filename)  # Đảm bảo tên file an toàn
+                file_path = os.path.join(UPLOAD_FOLDER_FOODS, fileName)
+
+                # Lưu file vào thư mục
+                file.save(file_path)
+
+                image = fileName
+
         try:
             new_food = Foods(foodName=foodName, image=image, kcalOn100g=kcalOn100g, nutritionValue=nutritionValue,
                              preservation=preservation, note=note)
@@ -41,6 +71,14 @@ def add_foods_service():
             return jsonify({"message": "Can not add food!"}), 400
     else:
         return jsonify({"message": "Request error!"}), 400
+
+
+# Tải ảnh trực tiếp từ thư mục lưu trữ
+def get_image_service(fileName):
+    try:
+        return send_from_directory(UPLOAD_FOLDER_FOODS, fileName)
+    except FileNotFoundError:
+        abort(404, description="Image not found")
 
 
 def get_food_by_id_service(id):
@@ -94,17 +132,34 @@ def update_food_by_id_service(id):
     try:
         food = Foods.query.get(id)
         data = request.json
+        uploadImg = request.files
         if food:
-            if data and all(key in data for key in ('foodName', 'image', 'kcalOn100g', 'nutritionValue', 'preservation', 'note')) \
+            if data and all(key in data for key in ('foodName', 'kcalOn100g', 'nutritionValue', 'preservation', 'note')) \
                 and data['foodName'] and data['kcalOn100g'] and data['nutritionValue'] \
                     and data['foodName'] != "" and data['nutritionValue'] != "":
                 try:
                     food.foodName = data['foodName']
-                    food.image = data['image'] if data['image'] else None
                     food.kcalOn100g = data['kcalOn100g']
                     food.nutritionValue = data['nutritionValue']
                     food.preservation = data['preservation'] if data['preservation'] else None
                     food.note = data['note'] if data['note'] else None
+
+                    if 'picFood' in uploadImg:
+                        file = uploadImg['picFood']
+
+                        # Kiểm tra nếu file không có tên
+                        if file.filename == '':
+                            return jsonify({"message": "No selected file"}), 400
+
+                        # Kiểm tra loại file
+                        if file and allowed_file(file.filename):
+                            fileName = secure_filename(file.filename)  # Đảm bảo tên file an toàn
+                            file_path = os.path.join(UPLOAD_FOLDER_FOODS, fileName)
+
+                            # Lưu file vào thư mục
+                            file.save(file_path)
+
+                            food.image = fileName
 
                     db.session.commit()
 

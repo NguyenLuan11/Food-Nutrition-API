@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from .services import add_foods_service, get_food_by_id_service, get_all_foods_service, update_food_by_id_service, \
-    delete_food_by_id_service
+    delete_food_by_id_service, get_image_service
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt
 
@@ -16,6 +16,12 @@ def add_foods():
         return jsonify({'message': 'Permission denied'}), 403
 
     return add_foods_service()
+
+
+# GET IMG FOOD
+@foods.route('/food/images/<fileName>', methods=["GET"])
+def get_image(fileName):
+    return get_image_service(fileName)
 
 
 @foods.route("/food/<int:id>", methods=["GET"])

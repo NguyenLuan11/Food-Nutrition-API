@@ -9,4 +9,13 @@ if __name__ == "__main__":
     app = create_app()
     host_ip = get_local_ip()
 
+    if not os.path.exists(app.config['UPLOAD_FOLDER_ADMIN']):
+        os.makedirs(app.config['UPLOAD_FOLDER_ADMIN'])
+    if not os.path.exists(app.config['UPLOAD_FOLDER_USERS']):
+        os.makedirs(app.config['UPLOAD_FOLDER_USERS'])
+    if not os.path.exists(app.config['UPLOAD_FOLDER_FOODS']):
+        os.makedirs(app.config['UPLOAD_FOLDER_FOODS'])
+    if not os.path.exists(app.config['UPLOAD_FOLDER_ARTICLES']):
+        os.makedirs(app.config['UPLOAD_FOLDER_ARTICLES'])
+
     app.run(host=host_ip, port=os.environ.get("PORT"), debug=True)

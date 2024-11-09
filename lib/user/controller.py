@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify
 from .services import register_user_service, get_all_user_service, get_user_by_id_service, \
     update_user_by_id_service, delete_user_by_id_service, login_user_service, refresh_token_service, \
     update_image_avt_user_by_id_service, update_state_user_by_id_service, get_user_by_name_service, \
-    get_user_by_email_gg_service, add_user_service
+    get_user_by_email_gg_service, add_user_service, get_image_service
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt
 
@@ -38,7 +38,8 @@ def add_user():
     return add_user_service()
 
 
-@user.route("/upload-avt/<int:id>", methods=["PUT"])
+# UPDATE AVT USER BY ID
+@user.route("/user/upload-avt/<int:id>", methods=["PUT"])
 @jwt_required()
 @swag_from("docs/update_image_avt_user_by_id.yaml")
 def update_image_avt_user_by_id(id):
@@ -48,6 +49,11 @@ def update_image_avt_user_by_id(id):
 
     return update_image_avt_user_by_id_service(id)
 
+
+# GET AVT USER
+@user.route('/user/images/<fileName>', methods=["GET"])
+def get_image(fileName):
+    return get_image_service(fileName)
 
 @user.route("/user/state/<int:id>", methods=["PUT"])
 @jwt_required()
