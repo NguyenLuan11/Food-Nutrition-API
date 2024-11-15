@@ -15,6 +15,7 @@ users_schema = UserSchema(many=True)
 UPLOAD_FOLDER_USERS = os.path.join(os.getcwd(), UPLOAD_FOLDER_USERS)
 
 
+# GET LIST USER BMI BY ID
 def get_list_user_bmi_by_userID(userID):
     user_bmi = UserBMI.query.filter_by(userID=userID).all()
     # print(user_bmi)
@@ -34,6 +35,7 @@ def get_list_user_bmi_by_userID(userID):
         return None
 
 
+# LOGIN
 def login_user_service():
     data = request.json
     if data and all(key in data for key in ('userName', 'password')) and data['userName'] and data['password'] \
@@ -72,6 +74,7 @@ def login_user_service():
         return jsonify({"message": "Login error!"}), 400
 
 
+# REFRESH TOKEN
 def refresh_token_service():
     current_user = get_jwt_identity()
     new_access_token = create_access_token(identity=current_user, additional_claims={'role': 'user'})
@@ -79,6 +82,7 @@ def refresh_token_service():
     return jsonify(access_token=new_access_token), 200
 
 
+# GET USER INFOR BY ACCESS TOKEN
 def get_user_infor_by_access_token_service():
     current_user = get_jwt_identity()
     user = User.query.filter_by(userName=current_user).first()
@@ -101,6 +105,7 @@ def get_user_infor_by_access_token_service():
         }), 200
 
 
+# REGISTER
 def register_user_service():
     data = request.json
     if data and all(key in data for key in ('userName', 'password', 'dateBirth', 'email')) \
@@ -145,6 +150,7 @@ def register_user_service():
         return jsonify({"message": "Register error!"}), 400
 
 
+# ADD USER
 def add_user_service():
     data = request.json
     if data and all(key in data for key in ('userName', 'fullName', 'image', 'password', 'dateBirth', 'email',
@@ -201,6 +207,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+# UPDATE IMG AVT USER
 def update_image_avt_user_by_id_service(id):
     try:
         user = User.query.get(id)
@@ -241,6 +248,7 @@ def update_image_avt_user_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET IMG USER
 # Tải ảnh trực tiếp từ thư mục lưu trữ
 def get_image_service(fileName):
     try:
@@ -249,6 +257,7 @@ def get_image_service(fileName):
         abort(404, description="Image not found")
 
 
+# UPDATE USER'S STATE BY ID
 def update_state_user_by_id_service(id):
     try:
         user = User.query.get(id)
@@ -278,6 +287,7 @@ def update_state_user_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET USER BY ID
 def get_user_by_id_service(id):
     try:
         user = User.query.get(id)
@@ -305,6 +315,7 @@ def get_user_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET USER BY NAME
 def get_user_by_name_service(userName):
     try:
         user = User.query.filter_by(userName=userName).first()
@@ -332,6 +343,7 @@ def get_user_by_name_service(userName):
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET USER BY EMAIL GG
 def get_user_by_email_gg_service(userName, email):
     try:
         user = User.query.filter_by(userName=userName, email=email).first()
@@ -365,6 +377,7 @@ def get_user_by_email_gg_service(userName, email):
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET ALL USERS
 def get_all_user_service():
     try:
         users = User.query.all()
@@ -395,6 +408,7 @@ def get_all_user_service():
         return jsonify({"message": "Request error!"}), 400
 
 
+# UPDATE USER BY ID
 def update_user_by_id_service(id):
     try:
         user = User.query.get(id)
@@ -441,6 +455,7 @@ def update_user_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# DELETE USER BMI
 # Sử dụng sự kiện before_delete để xóa tất cả các đối tượng UserBMI liên quan trước khi xóa đối tượng User
 @event.listens_for(User, 'before_delete')
 def delete_related_bmis(mapper, connection, target):
@@ -452,6 +467,7 @@ def delete_related_bmis(mapper, connection, target):
         return False, str(e)
 
 
+# DELETE USER BY ID
 def delete_user_by_id_service(id):
     try:
         user = User.query.get(id)

@@ -7,6 +7,7 @@ from flask_jwt_extended import jwt_required, get_jwt
 foods = Blueprint("foods", __name__, url_prefix="/api/foods-management")
 
 
+# ADD NEW FOOD
 @foods.route("/food", methods=["POST"])
 @jwt_required()
 @swag_from("docs/add_food.yaml")
@@ -35,18 +36,21 @@ def upload_img_food_by_id(id):
     return upload_img_food_by_id_service(id)
 
 
+# GET FOOD BY ID
 @foods.route("/food/<int:id>", methods=["GET"])
 @swag_from("docs/get_food_by_id.yaml")
 def get_food_by_id(id):
     return get_food_by_id_service(id)
 
 
+# GET ALL FOODS
 @foods.route("/foods", methods=["GET"])
 @swag_from("docs/get_all_foods.yaml")
 def get_all_foods():
     return get_all_foods_service()
 
 
+# UPDATE FOOD BY ID
 @foods.route("/food/<int:id>", methods=["PUT"])
 @jwt_required()
 @swag_from("docs/update_food_by_id.yaml")
@@ -58,6 +62,7 @@ def update_food_by_id(id):
     return update_food_by_id_service(id)
 
 
+# DELETE FOOD BY ID
 @foods.route("/food/<int:id>", methods=["DELETE"])
 @jwt_required()
 @swag_from("docs/delete_food_by_id.yaml")

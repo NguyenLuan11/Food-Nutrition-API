@@ -9,12 +9,14 @@ from flask_jwt_extended import jwt_required, get_jwt
 user = Blueprint("user", __name__, url_prefix="/api/user-management")
 
 
+# LOGIN
 @user.route("/login", methods=["POST"])
 @swag_from("docs/login_user.yaml")
 def login_user():
     return login_user_service()
 
 
+# REFRESH TOKEN
 @user.route("/refresh-token", methods=["POST"])
 @jwt_required(refresh=True)
 @swag_from("docs/refresh_token.yaml")
@@ -26,12 +28,14 @@ def refresh_token():
     return refresh_token_service()
 
 
+# REGISTER
 @user.route("/register", methods=["POST"])
 @swag_from("docs/register_user.yaml")
 def register_user():
     return register_user_service()
 
 
+# ADD NEW USER
 @user.route("/add", methods=["POST"])
 @swag_from("docs/add_user.yaml")
 def add_user():
@@ -55,6 +59,8 @@ def update_image_avt_user_by_id(id):
 def get_image(fileName):
     return get_image_service(fileName)
 
+
+# UPDATE USER'S STATE BY ID
 @user.route("/user/state/<int:id>", methods=["PUT"])
 @jwt_required()
 @swag_from("docs/update_state_user_by_id.yaml")
@@ -66,24 +72,28 @@ def update_state_user_by_id(id):
     return update_state_user_by_id_service(id)
 
 
+# GET USER BY ID
 @user.route("/user/<int:id>", methods=["GET"])
 @swag_from("docs/get_user_by_id.yaml")
 def get_user_by_id(id):
     return get_user_by_id_service(id)
 
 
+# GET USER BY NAME
 @user.route("/user/<string:userName>", methods=["GET"])
 @swag_from("docs/get_user_by_name.yaml")
 def get_user_by_name(userName):
     return get_user_by_name_service(userName)
 
 
+# GET USER BY EMAIL GG
 @user.route("/user/<string:userName>/<string:email>", methods=["GET"])
 @swag_from("docs/get_user_by_email_gg.yaml")
 def get_user_by_email_gg(userName, email):
     return get_user_by_email_gg_service(userName, email)
 
 
+# GET ALL USERS
 @user.route("/users", methods=["GET"])
 @jwt_required()
 @swag_from("docs/get_all_users.yaml")
@@ -95,12 +105,14 @@ def get_all_users():
     return get_all_user_service()
 
 
+# UPDATE USER BY ID
 @user.route("/user/<int:id>", methods=["PUT"])
 @swag_from("docs/update_user_by_id.yaml")
 def update_user_by_id(id):
     return update_user_by_id_service(id)
 
 
+# DELETE USER BY ID
 @user.route("/user/<int:id>", methods=["DELETE"])
 @jwt_required()
 @swag_from("docs/delete_user_by_id.yaml")

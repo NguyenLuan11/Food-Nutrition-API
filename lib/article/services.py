@@ -18,6 +18,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+# UPLOAD THUMBNAIL ARTICLE BY ID
 def upload_thumbnail_article_by_id_service(id):
     try:
         article = Article.query.get(id)
@@ -57,6 +58,7 @@ def upload_thumbnail_article_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET THUMBNAIL ARTICLE
 # Tải ảnh trực tiếp từ thư mục lưu trữ
 def get_image_service(fileName):
     try:
@@ -65,6 +67,7 @@ def get_image_service(fileName):
         abort(404, description="Image not found")
 
 
+# ADD ARTICLE
 def add_article_service():
     data = request.json
     if data and all(key in data for key in ('title', 'author', 'shortDescription', 'content',
@@ -102,6 +105,7 @@ def add_article_service():
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET ARTICLE BY ID
 def get_article_by_id_service(id):
     try:
         article = Article.query.get(id)
@@ -126,6 +130,7 @@ def get_article_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET ALL ARTICLE
 def get_all_articles_service():
     try:
         articles = Article.query.all()
@@ -154,6 +159,7 @@ def get_all_articles_service():
         return jsonify({"message": "Request error!"}), 400
 
 
+# UPDATE ARTICLE BY ID
 def update_article_by_id_service(id):
     try:
         article = Article.query.get(id)
@@ -193,6 +199,7 @@ def update_article_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# DELETE ARTICLE BY ID
 def delete_article_by_id_service(id):
     try:
         article = Article.query.get(id)
@@ -212,6 +219,7 @@ def delete_article_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET ARTICLE BY CATEGORY
 def get_article_by_category_service(categoryName):
     try:
         articles = Article.query.join(CategoryArticle, Article.categoryID == CategoryArticle.categoryID)\

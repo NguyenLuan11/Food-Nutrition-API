@@ -19,6 +19,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+# UPLOAD IMG FOOD BY ID
 def upload_img_food_by_id_service(id):
     try:
         food = Foods.query.get(id)
@@ -58,6 +59,7 @@ def upload_img_food_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# ADD NEW FOOD
 def add_foods_service():
     data = request.json
     if data and all(key in data for key in ('foodName', 'kcalOn100g', 'nutritionValue', 'preservation', 'note')) \
@@ -93,6 +95,7 @@ def add_foods_service():
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET IMG FOOD
 # Tải ảnh trực tiếp từ thư mục lưu trữ
 def get_image_service(fileName):
     try:
@@ -101,6 +104,7 @@ def get_image_service(fileName):
         abort(404, description="Image not found")
 
 
+# GET FOOD BY ID
 def get_food_by_id_service(id):
     try:
         food = Foods.query.get(id)
@@ -123,6 +127,7 @@ def get_food_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# GET ALL FOODS
 def get_all_foods_service():
     try:
         foods = Foods.query.all()
@@ -148,6 +153,7 @@ def get_all_foods_service():
         return jsonify({"message": "Request error!"}), 400
 
 
+# UPDATE FOOD BY ID
 def update_food_by_id_service(id):
     try:
         food = Foods.query.get(id)
@@ -184,6 +190,7 @@ def update_food_by_id_service(id):
         return jsonify({"message": "Request error!"}), 400
 
 
+# DELETE FOODNUTRIENT
 # Sử dụng sự kiện before_delete để xóa tất cả các đối tượng FoodNutrient liên quan trước khi xóa đối tượng Foods
 @event.listens_for(Foods, 'before_delete')
 def delete_related_foodNutrient(mapper, connection, target):
@@ -195,6 +202,7 @@ def delete_related_foodNutrient(mapper, connection, target):
         return False, str(e)
 
 
+# DELETE FOOD BY ID
 def delete_food_by_id_service(id):
     try:
         food = Foods.query.get(id)

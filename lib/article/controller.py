@@ -8,6 +8,7 @@ from flask_jwt_extended import jwt_required, get_jwt
 article = Blueprint("article", __name__, url_prefix="/api/article-management")
 
 
+# ADD NEW ARTICLE
 @article.route("/article", methods=["POST"])
 @jwt_required()
 @swag_from("docs/add_article.yaml")
@@ -36,18 +37,21 @@ def get_image(fileName):
     return get_image_service(fileName)
 
 
+# GET ARTICLE BY ID
 @article.route("/article/<int:id>", methods=["GET"])
 @swag_from("docs/get_article_by_id.yaml")
 def get_article_by_id(id):
     return get_article_by_id_service(id)
 
 
+# GET ALL ARTICLES
 @article.route("/articles", methods=["GET"])
 @swag_from("docs/get_all_article.yaml")
 def get_all_article():
     return get_all_articles_service()
 
 
+# UPDATE ARTICLE BY ID
 @article.route("/article/<int:id>", methods=["PUT"])
 @jwt_required()
 @swag_from("docs/update_article_by_id.yaml")
@@ -59,6 +63,7 @@ def update_article_by_id(id):
     return update_article_by_id_service(id)
 
 
+# DELETE ARTICLE BY ID
 @article.route("/article/<int:id>", methods=["DELETE"])
 @jwt_required()
 @swag_from("docs/delete_article_by_id.yaml")
@@ -70,6 +75,7 @@ def delete_article_by_id(id):
     return delete_article_by_id_service(id)
 
 
+# GET ARTICLE BY CATEGORY
 @article.route("/article/<string:categoryName>", methods=["GET"])
 @swag_from("docs/get_article_by_category.yaml")
 def get_article_by_category(categoryName):
