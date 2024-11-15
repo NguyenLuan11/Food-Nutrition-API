@@ -7,12 +7,12 @@ from sqlalchemy import event
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 from werkzeug.utils import secure_filename
 import os
-from ..config import ALLOWED_EXTENSIONS
+from ..config import ALLOWED_EXTENSIONS, UPLOAD_FOLDER_USERS
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
-UPLOAD_FOLDER_USERS = os.path.join(os.getcwd(), "images/users")
+UPLOAD_FOLDER_USERS = os.path.join(os.getcwd(), UPLOAD_FOLDER_USERS)
 
 
 def get_list_user_bmi_by_userID(userID):

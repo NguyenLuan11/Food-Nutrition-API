@@ -1,24 +1,81 @@
 from ..model import db, Article, CategoryArticle
-from flask import request, jsonify
+from flask import request, jsonify, send_from_directory, abort
 from ..food_nutrition_ma import ArticleSchema
 from sqlalchemy.sql import func
+from werkzeug.utils import secure_filename
+import os
+from ..config import ALLOWED_EXTENSIONS, UPLOAD_FOLDER_ARTICLES
 
 article_schema = ArticleSchema()
 articles_schema = ArticleSchema(many=True)
 
+UPLOAD_FOLDER_ARTICLES = os.path.join(os.getcwd(), UPLOAD_FOLDER_ARTICLES)
+
+
+# Hàm kiểm tra định dạng file hợp lệ
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def upload_thumbnail_article_by_id_service(id):
+    try:
+        article = Article.query.get(id)
+        uploadImg = request.files
+        if article:
+            if 'picArticle' in uploadImg:
+                file = uploadImg['picArticle']
+
+                # Kiểm tra nếu file không có tên
+                if file.filename == '':
+                    return jsonify({"message": "No selected file"}), 400
+
+                # Kiểm tra loại file
+                if file and allowed_file(file.filename):
+                    fileName = secure_filename(file.filename)  # Đảm bảo tên file an toàn
+                    file_path = os.path.join(UPLOAD_FOLDER_ARTICLES, fileName)
+
+                    # Lưu file vào thư mục
+                    file.save(file_path)
+
+                    try:
+                        article.thumbnail = fileName
+                        db.session.commit()
+
+                        return jsonify({
+                            "thumbnail": article.thumbnail if article.thumbnail else None
+                        }), 200
+                    except IndentationError:
+                        db.session.rollback()
+                        return jsonify({"message": "Can not upload food's image!"}), 400
+            else:
+                return jsonify({"message": "No image provided!"}), 400
+        else:
+            return jsonify({"message": "Not found food!"}), 404
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
+# Tải ảnh trực tiếp từ thư mục lưu trữ
+def get_image_service(fileName):
+    try:
+        return send_from_directory(UPLOAD_FOLDER_ARTICLES, fileName)
+    except FileNotFoundError:
+        abort(404, description="Image not found")
+
 
 def add_article_service():
     data = request.json
-    if data and all(key in data for key in ('title', 'thumbnail', 'author', 'shortDescription', 'content',
+    if data and all(key in data for key in ('title', 'author', 'shortDescription', 'content',
         'categoryID')) and data['title'] and data['content'] and data['title'] != "" and data['content'] != "":
         title = data['title']
-        thumbnail = data['thumbnail'] if data['thumbnail'] else None
         author = data['author'] if data['author'] else None
         shortDescription = data['shortDescription'] if data['shortDescription'] else None
         content = data['content']
         categoryID = data['categoryID'] if data['categoryID'] else None
         try:
-            new_article = Article(title=title, thumbnail=thumbnail, author=author, shortDescription=shortDescription,
+            new_article = Article(title=title, author=author, shortDescription=shortDescription,
                                   content=content, categoryID=categoryID)
 
             db.session.add(new_article)
@@ -102,11 +159,10 @@ def update_article_by_id_service(id):
         article = Article.query.get(id)
         data = request.json
         if article:
-            if data and all(key in data for key in ('title', 'thumbnail', 'author', 'shortDescription', 'content',
+            if data and all(key in data for key in ('title', 'author', 'shortDescription', 'content',
                 'categoryID')) and data['title'] and data['content'] and data['title'] != "" and data['content'] != "":
                 try:
                     article.title = data['title']
-                    article.thumbnail = data['thumbnail'] if data['thumbnail'] else None
                     article.author = data['author'] if data['author'] else None
                     article.shortDescription = data['shortDescription'] if data['shortDescription'] else None
                     article.content = data['content']

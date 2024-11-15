@@ -4,12 +4,12 @@ from flask import request, jsonify, send_from_directory, abort
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 from werkzeug.utils import secure_filename
 import os
-from ..config import ALLOWED_EXTENSIONS
+from ..config import ALLOWED_EXTENSIONS, UPLOAD_FOLDER_ADMIN
 
 admin_schema = AdminSchema()
 admins_schema = AdminSchema(many=True)
 
-UPLOAD_FOLDER_ADMIN = os.path.join(os.getcwd(), "images/admin")
+UPLOAD_FOLDER_ADMIN = os.path.join(os.getcwd(), UPLOAD_FOLDER_ADMIN)
 
 
 def count_all_items_service():

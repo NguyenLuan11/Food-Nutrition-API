@@ -5,12 +5,12 @@ from ..model import db, Foods, FoodNutrient
 from ..food_nutrition_ma import FoodsSchema
 from werkzeug.utils import secure_filename
 import os
-from ..config import ALLOWED_EXTENSIONS
+from ..config import ALLOWED_EXTENSIONS, UPLOAD_FOLDER_FOODS
 
 food = FoodsSchema()
 foods = FoodsSchema(many=True)
 
-UPLOAD_FOLDER_FOODS = os.path.join(os.getcwd(), "images/foods")
+UPLOAD_FOLDER_FOODS = os.path.join(os.getcwd(), UPLOAD_FOLDER_FOODS)
 
 
 # Hàm kiểm tra định dạng file hợp lệ
