@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from .services import add_foods_service, get_food_by_id_service, get_all_foods_service, update_food_by_id_service, \
-    delete_food_by_id_service, get_image_service, upload_img_food_by_id_service
+    delete_food_by_id_service, get_image_service, upload_img_food_by_id_service, recommend_foods_by_bmi_service
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt
 
@@ -17,6 +17,13 @@ def add_foods():
         return jsonify({'message': 'Permission denied'}), 403
 
     return add_foods_service()
+
+
+# RECOMMEND FOODS
+@foods.route('/food/recommend/<path:BMI>', methods=["GET"])
+def recommend_foods_by_bmi(BMI):
+    BMI = float(BMI)
+    return recommend_foods_by_bmi_service(BMI)
 
 
 # GET IMG FOOD

@@ -13,6 +13,57 @@ foods = FoodsSchema(many=True)
 UPLOAD_FOLDER_FOODS = os.path.join(os.getcwd(), UPLOAD_FOLDER_FOODS)
 
 
+# Hàm phân loại BMI
+def determine_bmi_category(bmi):
+    if bmi < 18.5:
+        return "underweight"
+    elif 18.5 <= bmi < 24.9:
+        return "normal"
+    elif 25 <= bmi < 29.9:
+        return "overweight"
+    else:
+        return "obese"
+
+
+def recommend_foods_by_bmi_service(BMI):
+    try:
+        # Phân loại BMI
+        categoryBMI = determine_bmi_category(BMI)
+
+        list_recommend_foods = []
+
+        # Lọc thực phẩm theo loại
+        if categoryBMI == "underweight":
+            recommend_foods = Foods.query.filter(Foods.kcalOn100g > 150).all()
+        elif categoryBMI == "normal":
+            recommend_foods = Foods.query.filter(Foods.kcalOn100g <= 250).all()
+        elif categoryBMI == "overweight":
+            recommend_foods = Foods.query.filter(Foods.kcalOn100g < 150).all()
+        else:  # obese
+            recommend_foods = Foods.query.filter(Foods.kcalOn100g < 150).all()
+
+        if recommend_foods:
+            for food in recommend_foods:
+                list_recommend_foods.append({
+                    "foodID": food.foodID,
+                    "foodName": food.foodName,
+                    "image": food.image or None,
+                    "kcalOn100g": food.kcalOn100g,
+                    "nutritionValue": food.nutritionValue,
+                    "preservation": food.preservation or None,
+                    "note": food.note or None,
+                    "created_date": food.created_date.strftime("%Y-%m-%d"),
+                    "modified_date": food.modified_date.strftime("%Y-%m-%d") or None
+                })
+            return jsonify(list_recommend_foods), 200
+        else:
+            return jsonify({"message": "Haven't list recommend foods!"}), 404
+
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
 # Hàm kiểm tra định dạng file hợp lệ
 def allowed_file(filename):
     return '.' in filename and \
