@@ -113,18 +113,27 @@ def upload_img_food_by_id_service(id):
 # ADD NEW FOOD
 def add_foods_service():
     data = request.json
-    if data and all(key in data for key in ('foodName', 'kcalOn100g', 'nutritionValue', 'preservation', 'note')) \
-        and data['foodName'] and data['kcalOn100g'] and data['nutritionValue'] \
-            and data['foodName'] != "" and data['nutritionValue'] != "":
+    if data and all(key in data for key in ('foodName', 'kcalOn100g', 'proteinOn100g', 'carbsOn100g', 'fatOn100g',
+    'fiberOn100g', 'omega3On100g', 'sugarOn100g', 'nutritionValue', 'preservation', 'note')) \
+        and data['foodName'] and data['kcalOn100g'] and data['proteinOn100g'] and data['carbsOn100g'] \
+            and data['fatOn100g'] and data['fiberOn100g'] and data['omega3On100g'] and data['sugarOn100g'] \
+            and data['nutritionValue'] and data['foodName'] != "" and data['nutritionValue'] != "":
         foodName = data['foodName']
         kcalOn100g = data['kcalOn100g']
+        proteinOn100g = data['proteinOn100g']
+        carbsOn100g = data['carbsOn100g']
+        fatOn100g = data['fatOn100g']
+        fiberOn100g = data['fiberOn100g']
+        omega3On100g = data['omega3On100g']
+        sugarOn100g = data['sugarOn100g']
         nutritionValue = data['nutritionValue']
         preservation = data['preservation'] if data['preservation'] else None
         note = data['note'] if data['note'] else None
 
         try:
             new_food = Foods(foodName=foodName, kcalOn100g=kcalOn100g, nutritionValue=nutritionValue,
-                             preservation=preservation, note=note)
+                             preservation=preservation, note=note, proteinOn100g=proteinOn100g, carbsOn100g=carbsOn100g,
+                             fatOn100g=fatOn100g, fiberOn100g=fiberOn100g, omega3On100g=omega3On100g, sugarOn100g=sugarOn100g)
             db.session.add(new_food)
             db.session.commit()
 
@@ -133,6 +142,12 @@ def add_foods_service():
                 "foodName": new_food.foodName,
                 "image": new_food.image if new_food.image else None,
                 "kcalOn100g": new_food.kcalOn100g,
+                # "proteinOn100g": new_food.proteinOn100g,
+                # "carbsOn100g": new_food.carbsOn100g,
+                # "fatOn100g": new_food.fatOn100g,
+                # "fiberOn100g": new_food.fiberOn100g,
+                # "omega3On100g": new_food.omega3On100g,
+                # "sugarOn100g": new_food.sugarOn100g,
                 "nutritionValue": new_food.nutritionValue,
                 "preservation": new_food.preservation if new_food.preservation else None,
                 "note": new_food.note if new_food.note else None,
@@ -210,12 +225,22 @@ def update_food_by_id_service(id):
         food = Foods.query.get(id)
         data = request.json
         if food:
-            if data and all(key in data for key in ('foodName', 'kcalOn100g', 'nutritionValue', 'preservation', 'note')) \
-                and data['foodName'] and data['kcalOn100g'] and data['nutritionValue'] \
-                    and data['foodName'] != "" and data['nutritionValue'] != "":
+            if data and all(
+                    key in data for key in ('foodName', 'kcalOn100g', 'proteinOn100g', 'carbsOn100g', 'fatOn100g',
+                                            'fiberOn100g', 'omega3On100g', 'sugarOn100g', 'nutritionValue',
+                                            'preservation', 'note')) \
+                    and data['foodName'] and data['kcalOn100g'] and data['proteinOn100g'] and data['carbsOn100g'] \
+                    and data['fatOn100g'] and data['fiberOn100g'] and data['omega3On100g'] and data['sugarOn100g'] \
+                    and data['nutritionValue'] and data['foodName'] != "" and data['nutritionValue'] != "":
                 try:
                     food.foodName = data['foodName']
                     food.kcalOn100g = data['kcalOn100g']
+                    food.proteinOn100g = data['proteinOn100g']
+                    food.carbsOn100g = data['carbsOn100g']
+                    food.fatOn100g = data['fatOn100g']
+                    food.fiberOn100g = data['fiberOn100g']
+                    food.omega3On100g = data['omega3On100g']
+                    food.sugarOn100g = data['sugarOn100g']
                     food.nutritionValue = data['nutritionValue']
                     food.preservation = data['preservation'] if data['preservation'] else None
                     food.note = data['note'] if data['note'] else None

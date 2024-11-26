@@ -73,22 +73,35 @@ class Foods(db.Model):
     foodID = db.Column(db.Integer, primary_key=True)
     foodName = db.Column(db.String(50), nullable=False)
     image = db.Column(db.String(100))
-    kcalOn100g = db.Column(db.Float, nullable=False)
     nutritionValue = db.Column(db.Text, nullable=False)
     preservation = db.Column(db.Text)
     note = db.Column(db.Text)
+    kcalOn100g = db.Column(db.Float, nullable=False)
+    proteinOn100g = db.Column(db.Float, nullable=False)
+    carbsOn100g = db.Column(db.Float, nullable=False)
+    fatOn100g = db.Column(db.Float, nullable=False)
+    fiberOn100g = db.Column(db.Float, nullable=False)
+    omega3On100g = db.Column(db.Float, nullable=False)
+    sugarOn100g = db.Column(db.Float, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.now)
     modified_date = db.Column(db.DateTime, onupdate=datetime.now)
 
     food_nutrient = db.relationship('FoodNutrient', backref='foods', cascade="all, delete-orphan")
 
-    def __init__(self, foodName, image, kcalOn100g, nutritionValue, preservation, note):
+    def __init__(self, foodName, image, kcalOn100g, nutritionValue, preservation, note,
+                 proteinOn100g, carbsOn100g, fatOn100g, fiberOn100g, omega3On100g, sugarOn100g):
         self.foodName = foodName
         self.image = image
         self.kcalOn100g = kcalOn100g
         self.nutritionValue = nutritionValue
         self.preservation = preservation
         self.note = note
+        self.proteinOn100g = proteinOn100g
+        self.carbsOn100g = carbsOn100g
+        self.fatOn100g = fatOn100g
+        self.fiberOn100g = fiberOn100g
+        self.omega3On100g = omega3On100g
+        self.sugarOn100g = sugarOn100g
 
 
 class NatureNutrient(db.Model):
