@@ -201,6 +201,50 @@ def add_user_service():
         return jsonify({"message": "Register error!"}), 400
 
 
+def check_correct_pass_by_id_service(id):
+    try:
+        user = User.query.get(id)
+        data = request.json
+        if user:
+            if data and ('password' in data) and data['password'] != "":
+                check_pass = data['password'].strip()
+                pass_current = user.password
+
+                if check_pass == pass_current:
+                    return jsonify({"message": "Is correct password!"}), 200
+                else:
+                    return jsonify({"message": "Is not correct password!"}), 400
+        else:
+            return jsonify({"message": f"Not found user with ID is {id}!"}), 404
+
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
+def update_pass_by_id_service(id):
+    try:
+        user = User.query.get(id)
+        data = request.json
+        if user:
+            if data and ('password' in data) and data['password'] != "":
+                change_pass = data['password'].strip()
+
+                try:
+                    user.password = change_pass
+                    db.session.commit()
+                    return jsonify({"message": "Update user's password successfully!"}), 200
+                except IndentationError:
+                    db.session.rollback()
+                    return jsonify({"message": "Can't update user's password!"}), 400
+        else:
+            return jsonify({"message": f"Not found user with ID is {id}!"}), 404
+
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
 # Hàm kiểm tra định dạng file hợp lệ
 def allowed_file(filename):
     return '.' in filename and \

@@ -32,6 +32,50 @@ def count_all_items_service():
         return jsonify({"message": "Request error!"}), 400
 
 
+def check_correct_pass_by_id_service(id):
+    try:
+        admin = Admin.query.get(id)
+        data = request.json
+        if admin:
+            if data and ('password' in data) and data['password'] != "":
+                check_pass = data['password'].strip()
+                pass_current = admin.password
+
+                if check_pass == pass_current:
+                    return jsonify({"message": "Is correct password!"}), 200
+                else:
+                    return jsonify({"message": "Is not correct password!"}), 400
+        else:
+            return jsonify({"message": f"Not found admin with ID is {id}!"}), 404
+
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
+def update_pass_by_id_service(id):
+    try:
+        admin = Admin.query.get(id)
+        data = request.json
+        if admin:
+            if data and ('password' in data) and data['password'] != "":
+                change_pass = data['password'].strip()
+
+                try:
+                    admin.password = change_pass
+                    db.session.commit()
+                    return jsonify({"message": "Update admin's password successfully!"}), 200
+                except IndentationError:
+                    db.session.rollback()
+                    return jsonify({"message": "Can't update admin's password!"}), 400
+        else:
+            return jsonify({"message": f"Not found admin with ID is {id}!"}), 404
+
+    except IndentationError:
+        db.session.rollback()
+        return jsonify({"message": "Request error!"}), 400
+
+
 def login_admin_service():
     data = request.json
     if data and ('adminName' in data) and ('password' in data) and data['adminName'] and data['password'] \

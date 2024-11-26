@@ -1,25 +1,40 @@
 from flask import Blueprint, jsonify
 from .services import add_admin_service, get_admin_by_id_service, get_all_admin_service, update_admin_by_id_service, \
     delete_admin_by_id_service, login_admin_service, refresh_token_service, count_all_items_service, \
-    update_image_avt_admin_by_id_service, get_image_service
+    update_image_avt_admin_by_id_service, get_image_service, check_correct_pass_by_id_service, update_pass_by_id_service
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt
 
 admin = Blueprint("admin", __name__, url_prefix="/api/admin-management")
 
 
+# CHECK PASS ADMIN
+@admin.route('/admin/checkpass/<int:id>', methods=["POST"])
+def check_correct_pass_by_id(id):
+    return check_correct_pass_by_id_service(id)
+
+
+# UPDATE PASS ADMIN BY ID
+@admin.route('/admin/updatepass/<int:id>', methods=["PUT"])
+def update_pass_by_id(id):
+    return update_pass_by_id_service(id)
+
+
+# COUNT ALL ITEMS
 @admin.route("/count_all_items", methods=["GET"])
 @swag_from("docs/count_all_items.yaml")
 def count_all_items():
     return count_all_items_service()
 
 
+# LOGIN
 @admin.route("/login", methods=["POST"])
 @swag_from("docs/login_admin.yaml")
 def login_admin():
     return login_admin_service()
 
 
+# REFRESH TOKEN
 @admin.route("/refresh_token", methods=["POST"])
 @jwt_required(refresh=True)
 @swag_from("docs/refresh_token.yaml")

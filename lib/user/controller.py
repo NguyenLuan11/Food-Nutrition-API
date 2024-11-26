@@ -2,11 +2,24 @@ from flask import Blueprint, jsonify
 from .services import register_user_service, get_all_user_service, get_user_by_id_service, \
     update_user_by_id_service, delete_user_by_id_service, login_user_service, refresh_token_service, \
     update_image_avt_user_by_id_service, update_state_user_by_id_service, get_user_by_name_service, \
-    get_user_by_email_gg_service, add_user_service, get_image_service
+    get_user_by_email_gg_service, add_user_service, get_image_service, check_correct_pass_by_id_service, \
+    update_pass_by_id_service
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt
 
 user = Blueprint("user", __name__, url_prefix="/api/user-management")
+
+
+# CHECK PASS USER
+@user.route('/user/checkpass/<int:id>', methods=["POST"])
+def check_correct_pass_by_id(id):
+    return check_correct_pass_by_id_service(id)
+
+
+# UPDATE PASS USER BY ID
+@user.route('/user/updatepass/<int:id>', methods=["PUT"])
+def update_pass_by_id(id):
+    return update_pass_by_id_service(id)
 
 
 # LOGIN
