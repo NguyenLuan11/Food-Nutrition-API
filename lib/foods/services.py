@@ -27,20 +27,30 @@ def determine_bmi_category(bmi):
         return "obese"
 
 
+def food_to_dict(food):
+    return {
+        "foodID": food.foodID,
+        "foodName": food.foodName,
+        "image": food.image or None,
+        "nutritionValue": food.nutritionValue,
+        # "preservation": food.preservation or None,
+        # "note": food.note or None,
+        "kcalOn100g": food.kcalOn100g,
+        # "proteinOn100g": food.proteinOn100g,
+        # "carbsOn100g": food.carbsOn100g,
+        # "fatOn100g": food.fatOn100g,
+        # "fiberOn100g": food.fiberOn100g,
+        # "omega3On100g": food.omega3On100g,
+        # "sugarOn100g": food.sugarOn100g,
+        # "created_date": food.created_date.strftime("%Y-%m-%d"),
+        # "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
+    }
+
+
 def recommend_foods_by_bmi_service(BMI):
     try:
         # Phân loại BMI
         categoryBMI = determine_bmi_category(BMI)
-
-        # Yêu cầu dinh dưỡng của người dùng theo BMI
-        # bmi_ranges = {
-        #     'underweight':  [200, 80, 60, 10, 25, 2, 10],  # Calo, Protein, Carbs, Fat, Fiber, Omega3, Sugar
-        #     'normal':       [190, 70, 50, 15, 25, 2, 7],
-        #     'overweight':   [100, 70, 20, 3, 25, 7, 2],
-        #     'obese':        [100, 70, 20, 3, 25, 10, 2]
-        # }
-        #
-        # user_requirements = bmi_ranges[categoryBMI]
 
         # Lấy tất cả thực phẩm từ cơ sở dữ liệu
         foods = Foods.query.all()
@@ -78,7 +88,7 @@ def recommend_foods_by_bmi_service(BMI):
             return jsonify({"message": "No foods found that match the BMI category!"}), 404
 
         user_requirements = filtered_foods[0]
-        print(user_requirements)
+        # print(user_requirements)
 
         # Tính toán sự tương đồng cosine giữa yêu cầu người dùng và các thực phẩm
         food_features_array = np.array(food_features)
@@ -94,8 +104,14 @@ def recommend_foods_by_bmi_service(BMI):
         # Tạo danh sách thực phẩm gợi ý với similarity
         recommended_foods = [{"foodID": id, "foodName": food, "similarity": score} for id, food, score in top_foods]
 
+        list_recommended_foods = []
+        for food in foods:
+            for f in recommended_foods:
+                if food.foodID == f['foodID']:
+                    list_recommended_foods.append(food_to_dict(food))
+
         # Trả về danh sách thực phẩm gợi ý
-        return jsonify(recommended_foods), 200
+        return jsonify(list_recommended_foods), 200
 
     except Exception as e:
         return jsonify({"message": f"Request error: {str(e)}"}), 400
@@ -188,17 +204,17 @@ def add_foods_service():
                 "foodName": new_food.foodName,
                 "image": new_food.image or None,
                 "kcalOn100g": new_food.kcalOn100g,
-                "proteinOn100g": new_food.proteinOn100g,
-                "carbsOn100g": new_food.carbsOn100g,
-                "fatOn100g": new_food.fatOn100g,
-                "fiberOn100g": new_food.fiberOn100g,
-                "omega3On100g": new_food.omega3On100g,
-                "sugarOn100g": new_food.sugarOn100g,
+                # "proteinOn100g": new_food.proteinOn100g,
+                # "carbsOn100g": new_food.carbsOn100g,
+                # "fatOn100g": new_food.fatOn100g,
+                # "fiberOn100g": new_food.fiberOn100g,
+                # "omega3On100g": new_food.omega3On100g,
+                # "sugarOn100g": new_food.sugarOn100g,
                 "nutritionValue": new_food.nutritionValue,
-                "preservation": new_food.preservation or None,
-                "note": new_food.note or None,
+                # "preservation": new_food.preservation or None,
+                # "note": new_food.note or None,
                 "created_date": new_food.created_date.strftime("%Y-%m-%d"),
-                "modified_date": new_food.modified_date.strftime("%Y-%m-%d") if new_food.modified_date else None
+                # "modified_date": new_food.modified_date.strftime("%Y-%m-%d") if new_food.modified_date else None
             }), 200
         except Exception as e:
             db.session.rollback()
@@ -258,8 +274,8 @@ def get_all_foods_service():
                     "image": food.image or None,
                     "kcalOn100g": food.kcalOn100g,
                     "nutritionValue": food.nutritionValue,
-                    "preservation": food.preservation or None,
-                    "note": food.note or None,
+                    # "preservation": food.preservation or None,
+                    # "note": food.note or None,
                     "created_date": food.created_date.strftime("%Y-%m-%d"),
                     "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
                 })
@@ -307,16 +323,16 @@ def update_food_by_id_service(id):
                 "foodName": food.foodName,
                 "image": food.image or None,
                 "kcalOn100g": food.kcalOn100g,
-                "proteinOn100g": food.proteinOn100g,
-                "carbsOn100g": food.carbsOn100g,
-                "fatOn100g": food.fatOn100g,
-                "fiberOn100g": food.fiberOn100g,
-                "omega3On100g": food.omega3On100g,
-                "sugarOn100g": food.sugarOn100g,
+                # "proteinOn100g": food.proteinOn100g,
+                # "carbsOn100g": food.carbsOn100g,
+                # "fatOn100g": food.fatOn100g,
+                # "fiberOn100g": food.fiberOn100g,
+                # "omega3On100g": food.omega3On100g,
+                # "sugarOn100g": food.sugarOn100g,
                 "nutritionValue": food.nutritionValue,
-                "preservation": food.preservation or None,
-                "note": food.note or None,
-                "created_date": food.created_date.strftime("%Y-%m-%d"),
+                # "preservation": food.preservation or None,
+                # "note": food.note or None,
+                # "created_date": food.created_date.strftime("%Y-%m-%d"),
                 "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
             }), 200
         else:

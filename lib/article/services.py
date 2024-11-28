@@ -96,7 +96,7 @@ def add_article_service():
                 # "category": category.categoryName if category else None,
                 "categoryID": new_article.categoryID if new_article.categoryID else None,
                 "created_date": new_article.created_date.strftime("%Y-%m-%d"),
-                "modified_date": new_article.modified_date.strftime("%Y-%m-%d") if new_article.modified_date else None
+                # "modified_date": new_article.modified_date.strftime("%Y-%m-%d") if new_article.modified_date else None
             }), 200
         except IndentationError:
             db.session.rollback()

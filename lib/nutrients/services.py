@@ -42,12 +42,12 @@ def add_nutrient_service():
                 "description": new_nutrient.description if new_nutrient.description else None,
                 "needed": new_nutrient.needed,
                 "function": new_nutrient.function,
-                "deficiencySigns": new_nutrient.deficiencySigns if new_nutrient.deficiencySigns else None,
-                "excessSigns": new_nutrient.excessSigns if new_nutrient.excessSigns else None,
-                "subjectInterest": new_nutrient.subjectInterest if new_nutrient.subjectInterest else None,
-                "shortagePrevention": new_nutrient.shortagePrevention if new_nutrient.shortagePrevention else None,
+                # "deficiencySigns": new_nutrient.deficiencySigns if new_nutrient.deficiencySigns else None,
+                # "excessSigns": new_nutrient.excessSigns if new_nutrient.excessSigns else None,
+                # "subjectInterest": new_nutrient.subjectInterest if new_nutrient.subjectInterest else None,
+                # "shortagePrevention": new_nutrient.shortagePrevention if new_nutrient.shortagePrevention else None,
                 "created_date": new_nutrient.created_date.strftime("%Y-%m-%d"),
-                "modified_date": new_nutrient.modified_date.strftime("%Y-%m-%d") if new_nutrient.modified_date else None
+                # "modified_date": new_nutrient.modified_date.strftime("%Y-%m-%d") if new_nutrient.modified_date else None
             }), 200
         except IndentationError:
             db.session.rollback()
@@ -96,10 +96,10 @@ def get_all_nutrient_service():
                     "description": item.description if item.description else None,
                     "needed": item.needed,
                     "function": item.function,
-                    "deficiencySigns": item.deficiencySigns if item.deficiencySigns else None,
-                    "excessSigns": item.excessSigns if item.excessSigns else None,
-                    "subjectInterest": item.subjectInterest if item.subjectInterest else None,
-                    "shortagePrevention": item.shortagePrevention if item.shortagePrevention else None,
+                    # "deficiencySigns": item.deficiencySigns if item.deficiencySigns else None,
+                    # "excessSigns": item.excessSigns if item.excessSigns else None,
+                    # "subjectInterest": item.subjectInterest if item.subjectInterest else None,
+                    # "shortagePrevention": item.shortagePrevention if item.shortagePrevention else None,
                     "created_date": item.created_date.strftime("%Y-%m-%d"),
                     "modified_date": item.modified_date.strftime("%Y-%m-%d") if item.modified_date else None
                 })
@@ -143,10 +143,10 @@ def update_nutrient_by_id_service(id):
                         "description": nutrient.description if nutrient.description else None,
                         "needed": nutrient.needed,
                         "function": nutrient.function,
-                        "deficiencySigns": nutrient.deficiencySigns if nutrient.deficiencySigns else None,
-                        "excessSigns": nutrient.excessSigns if nutrient.excessSigns else None,
-                        "subjectInterest": nutrient.subjectInterest if nutrient.subjectInterest else None,
-                        "shortagePrevention": nutrient.shortagePrevention if nutrient.shortagePrevention else None,
+                        # "deficiencySigns": nutrient.deficiencySigns if nutrient.deficiencySigns else None,
+                        # "excessSigns": nutrient.excessSigns if nutrient.excessSigns else None,
+                        # "subjectInterest": nutrient.subjectInterest if nutrient.subjectInterest else None,
+                        # "shortagePrevention": nutrient.shortagePrevention if nutrient.shortagePrevention else None,
                         "created_date": nutrient.created_date.strftime("%Y-%m-%d"),
                         "modified_date": nutrient.modified_date.strftime("%Y-%m-%d")
                     }), 200
