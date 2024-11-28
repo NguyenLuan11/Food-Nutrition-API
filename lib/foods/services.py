@@ -15,7 +15,7 @@ foods = FoodsSchema(many=True)
 UPLOAD_FOLDER_FOODS = os.path.join(os.getcwd(), UPLOAD_FOLDER_FOODS)
 
 
-# Hàm phân loại BMI
+# Filter BMI
 def determine_bmi_category(bmi):
     if bmi < 18.5:
         return "underweight"
@@ -47,13 +47,15 @@ def food_to_dict(food):
     }
 
 
+# RECOMMEND FOODS
 def recommend_foods_by_bmi_service(BMI):
     try:
-        # Phân loại BMI
+        # Filter BMI
         categoryBMI = determine_bmi_category(BMI)
 
-        # Lấy tất cả thực phẩm từ cơ sở dữ liệu
+        # Get all foods from db
         foods = Foods.query.all()
+
         food_items = []
         food_ids = []
         food_features = []
@@ -61,7 +63,7 @@ def recommend_foods_by_bmi_service(BMI):
         for food in foods:
             food_ids.append(food.foodID)
             food_items.append(food.foodName)
-            # Lấy các thành phần dinh dưỡng cần thiết (kcal, protein, carbs, fat, fiber, omega3, sugar)
+            # Get nutrition components (kcal, protein, carbs, fat, fiber, omega3, sugar)
             food_features.append([
                 food.kcalOn100g,
                 food.proteinOn100g,
@@ -72,52 +74,49 @@ def recommend_foods_by_bmi_service(BMI):
                 food.sugarOn100g
             ])
 
-        # Chọn user_requirements dựa trên BMI
+        # Get user_requirements by BMI
         if categoryBMI == "underweight":
-            # Lọc thực phẩm có kcal >= 200
             filtered_foods = [features for features in food_features if features[0] >= 180]
         elif categoryBMI == "normal":
-            # Lọc thực phẩm có kcal trong khoảng từ 150 đến 250
             filtered_foods = [features for features in food_features if 150 <= features[0] <= 250]
         else:
-            # Lọc thực phẩm có kcal <= 150
             filtered_foods = [features for features in food_features if features[0] <= 150]
 
-            # Nếu không tìm thấy thực phẩm phù hợp, trả lỗi
         if not filtered_foods:
             return jsonify({"message": "No foods found that match the BMI category!"}), 404
 
         user_requirements = filtered_foods[0]
         # print(user_requirements)
 
-        # Tính toán sự tương đồng cosine giữa yêu cầu người dùng và các thực phẩm
+        # Calculate the cosine similarity between user requests and foods
         food_features_array = np.array(food_features)
         similarities = cosine_similarity([user_requirements], food_features_array)[0]
 
-        # Sắp xếp thực phẩm theo sự tương đồng
+        # Sort foods by similarity
         sorted_foods = sorted(zip(food_ids, food_items, similarities), key=lambda x: x[2], reverse=True)
 
-        # Lấy 2/3 danh sách đã sắp xếp
+        # Take 2/3 of the sorted list
         total_foods = len(sorted_foods)
         top_foods = sorted_foods[:int(2 * total_foods / 3)]
 
-        # Tạo danh sách thực phẩm gợi ý với similarity
+        # Create recommended foods with similarity
         recommended_foods = [{"foodID": id, "foodName": food, "similarity": score} for id, food, score in top_foods]
+        # print(recommended_foods)
 
+        # Get list recommended foods
         list_recommended_foods = []
         for food in foods:
             for f in recommended_foods:
                 if food.foodID == f['foodID']:
                     list_recommended_foods.append(food_to_dict(food))
 
-        # Trả về danh sách thực phẩm gợi ý
         return jsonify(list_recommended_foods), 200
 
     except Exception as e:
         return jsonify({"message": f"Request error: {str(e)}"}), 400
 
 
-# Hàm kiểm tra định dạng file hợp lệ
+# Check for valid file format
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -132,16 +131,16 @@ def upload_img_food_by_id_service(id):
             if 'picFood' in uploadImg:
                 file = uploadImg['picFood']
 
-                # Kiểm tra nếu file không có tên
+                # Check if file haven't name
                 if file.filename == '':
                     return jsonify({"message": "No selected file"}), 400
 
-                # Kiểm tra loại file
+                # Check kind of file
                 if file and allowed_file(file.filename):
                     fileName = secure_filename(file.filename)  # Đảm bảo tên file an toàn
                     file_path = os.path.join(UPLOAD_FOLDER_FOODS, fileName)
 
-                    # Lưu file vào thư mục
+                    # Save file into folder
                     file.save(file_path)
 
                     try:
@@ -167,7 +166,7 @@ def upload_img_food_by_id_service(id):
 def add_foods_service():
     data = request.json
 
-    # Kiểm tra xem dữ liệu có hợp lệ không
+    # Check if the data is valid
     required_fields = [
         'foodName', 'kcalOn100g', 'proteinOn100g', 'carbsOn100g', 'fatOn100g',
         'fiberOn100g', 'omega3On100g', 'sugarOn100g', 'nutritionValue', 'preservation', 'note'
@@ -175,7 +174,7 @@ def add_foods_service():
 
     if all(key in data for key in required_fields) and data.get('foodName') and data.get('nutritionValue'):
         try:
-            # Lấy giá trị từ request data
+            # Get value from request data
             foodName = data['foodName']
             kcalOn100g = data['kcalOn100g']
             proteinOn100g = data['proteinOn100g']
@@ -188,7 +187,7 @@ def add_foods_service():
             preservation = data.get('preservation')  # Preserve None if no value
             note = data.get('note')  # Preserve None if no value
 
-            # Tạo mới thực phẩm và thêm vào cơ sở dữ liệu
+            # Create new food and add to db
             new_food = Foods(
                 foodName=foodName, kcalOn100g=kcalOn100g, nutritionValue=nutritionValue,
                 preservation=preservation, note=note, proteinOn100g=proteinOn100g, carbsOn100g=carbsOn100g,
@@ -198,7 +197,6 @@ def add_foods_service():
             db.session.add(new_food)
             db.session.commit()
 
-            # Trả về thông tin thực phẩm đã thêm vào
             return jsonify({
                 "foodID": new_food.foodID,
                 "foodName": new_food.foodName,
@@ -224,7 +222,6 @@ def add_foods_service():
 
 
 # GET IMG FOOD
-# Tải ảnh trực tiếp từ thư mục lưu trữ
 def get_image_service(fileName):
     try:
         return send_from_directory(UPLOAD_FOLDER_FOODS, fileName)
