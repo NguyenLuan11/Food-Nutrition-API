@@ -92,8 +92,7 @@ def recommend_foods_by_bmi_service(BMI):
         top_foods = sorted_foods[:int(2 * total_foods / 3)]
 
         # Tạo danh sách thực phẩm gợi ý với similarity
-        recommended_foods = [{"foodID": id, "foodName": food, "similarity": score}
-                             for id, food, score in top_foods]
+        recommended_foods = [{"foodID": id, "foodName": food, "similarity": score} for id, food, score in top_foods]
 
         # Trả về danh sách thực phẩm gợi ý
         return jsonify(recommended_foods), 200
