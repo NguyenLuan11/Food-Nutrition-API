@@ -56,7 +56,7 @@ def register_mdns_service():
 
 def create_app(config_file="config.py"):
     app = Flask(__name__)
-    CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
+    CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
 
     # Add config
     app.config.from_pyfile(config_file)

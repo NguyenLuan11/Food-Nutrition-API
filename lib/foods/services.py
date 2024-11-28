@@ -6,6 +6,8 @@ from ..food_nutrition_ma import FoodsSchema
 from werkzeug.utils import secure_filename
 import os
 from ..config import ALLOWED_EXTENSIONS, UPLOAD_FOLDER_FOODS
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 
 food = FoodsSchema()
 foods = FoodsSchema(many=True)
@@ -30,38 +32,74 @@ def recommend_foods_by_bmi_service(BMI):
         # Phân loại BMI
         categoryBMI = determine_bmi_category(BMI)
 
-        list_recommend_foods = []
+        # Yêu cầu dinh dưỡng của người dùng theo BMI
+        # bmi_ranges = {
+        #     'underweight':  [200, 80, 60, 10, 25, 2, 10],  # Calo, Protein, Carbs, Fat, Fiber, Omega3, Sugar
+        #     'normal':       [190, 70, 50, 15, 25, 2, 7],
+        #     'overweight':   [100, 70, 20, 3, 25, 7, 2],
+        #     'obese':        [100, 70, 20, 3, 25, 10, 2]
+        # }
+        #
+        # user_requirements = bmi_ranges[categoryBMI]
 
-        # Lọc thực phẩm theo loại
+        # Lấy tất cả thực phẩm từ cơ sở dữ liệu
+        foods = Foods.query.all()
+        food_items = []
+        food_ids = []
+        food_features = []
+
+        for food in foods:
+            food_ids.append(food.foodID)
+            food_items.append(food.foodName)
+            # Lấy các thành phần dinh dưỡng cần thiết (kcal, protein, carbs, fat, fiber, omega3, sugar)
+            food_features.append([
+                food.kcalOn100g,
+                food.proteinOn100g,
+                food.carbsOn100g,
+                food.fatOn100g,
+                food.fiberOn100g,
+                food.omega3On100g,
+                food.sugarOn100g
+            ])
+
+        # Chọn user_requirements dựa trên BMI
         if categoryBMI == "underweight":
-            recommend_foods = Foods.query.filter(Foods.kcalOn100g > 150).all()
+            # Lọc thực phẩm có kcal >= 200
+            filtered_foods = [features for features in food_features if features[0] >= 180]
         elif categoryBMI == "normal":
-            recommend_foods = Foods.query.filter(Foods.kcalOn100g <= 250).all()
-        elif categoryBMI == "overweight":
-            recommend_foods = Foods.query.filter(Foods.kcalOn100g < 150).all()
-        else:  # obese
-            recommend_foods = Foods.query.filter(Foods.kcalOn100g < 150).all()
-
-        if recommend_foods:
-            for food in recommend_foods:
-                list_recommend_foods.append({
-                    "foodID": food.foodID,
-                    "foodName": food.foodName,
-                    "image": food.image or None,
-                    "kcalOn100g": food.kcalOn100g,
-                    "nutritionValue": food.nutritionValue,
-                    "preservation": food.preservation or None,
-                    "note": food.note or None,
-                    "created_date": food.created_date.strftime("%Y-%m-%d"),
-                    "modified_date": food.modified_date.strftime("%Y-%m-%d") or None
-                })
-            return jsonify(list_recommend_foods), 200
+            # Lọc thực phẩm có kcal trong khoảng từ 150 đến 250
+            filtered_foods = [features for features in food_features if 150 <= features[0] <= 250]
         else:
-            return jsonify({"message": "Haven't list recommend foods!"}), 404
+            # Lọc thực phẩm có kcal <= 150
+            filtered_foods = [features for features in food_features if features[0] <= 150]
 
-    except IndentationError:
-        db.session.rollback()
-        return jsonify({"message": "Request error!"}), 400
+            # Nếu không tìm thấy thực phẩm phù hợp, trả lỗi
+        if not filtered_foods:
+            return jsonify({"message": "No foods found that match the BMI category!"}), 404
+
+        user_requirements = filtered_foods[0]
+        print(user_requirements)
+
+        # Tính toán sự tương đồng cosine giữa yêu cầu người dùng và các thực phẩm
+        food_features_array = np.array(food_features)
+        similarities = cosine_similarity([user_requirements], food_features_array)[0]
+
+        # Sắp xếp thực phẩm theo sự tương đồng
+        sorted_foods = sorted(zip(food_ids, food_items, similarities), key=lambda x: x[2], reverse=True)
+
+        # Lấy 2/3 danh sách đã sắp xếp
+        total_foods = len(sorted_foods)
+        top_foods = sorted_foods[:int(2 * total_foods / 3)]
+
+        # Tạo danh sách thực phẩm gợi ý với similarity
+        recommended_foods = [{"foodID": id, "foodName": food, "similarity": score}
+                             for id, food, score in top_foods]
+
+        # Trả về danh sách thực phẩm gợi ý
+        return jsonify(recommended_foods), 200
+
+    except Exception as e:
+        return jsonify({"message": f"Request error: {str(e)}"}), 400
 
 
 # Hàm kiểm tra định dạng file hợp lệ
@@ -113,52 +151,61 @@ def upload_img_food_by_id_service(id):
 # ADD NEW FOOD
 def add_foods_service():
     data = request.json
-    if data and all(key in data for key in ('foodName', 'kcalOn100g', 'proteinOn100g', 'carbsOn100g', 'fatOn100g',
-    'fiberOn100g', 'omega3On100g', 'sugarOn100g', 'nutritionValue', 'preservation', 'note')) \
-        and data['foodName'] and data['kcalOn100g'] and data['proteinOn100g'] and data['carbsOn100g'] \
-            and data['fatOn100g'] and data['fiberOn100g'] and data['omega3On100g'] and data['sugarOn100g'] \
-            and data['nutritionValue'] and data['foodName'] != "" and data['nutritionValue'] != "":
-        foodName = data['foodName']
-        kcalOn100g = data['kcalOn100g']
-        proteinOn100g = data['proteinOn100g']
-        carbsOn100g = data['carbsOn100g']
-        fatOn100g = data['fatOn100g']
-        fiberOn100g = data['fiberOn100g']
-        omega3On100g = data['omega3On100g']
-        sugarOn100g = data['sugarOn100g']
-        nutritionValue = data['nutritionValue']
-        preservation = data['preservation'] if data['preservation'] else None
-        note = data['note'] if data['note'] else None
 
+    # Kiểm tra xem dữ liệu có hợp lệ không
+    required_fields = [
+        'foodName', 'kcalOn100g', 'proteinOn100g', 'carbsOn100g', 'fatOn100g',
+        'fiberOn100g', 'omega3On100g', 'sugarOn100g', 'nutritionValue', 'preservation', 'note'
+    ]
+
+    if all(key in data for key in required_fields) and data.get('foodName') and data.get('nutritionValue'):
         try:
-            new_food = Foods(foodName=foodName, kcalOn100g=kcalOn100g, nutritionValue=nutritionValue,
-                             preservation=preservation, note=note, proteinOn100g=proteinOn100g, carbsOn100g=carbsOn100g,
-                             fatOn100g=fatOn100g, fiberOn100g=fiberOn100g, omega3On100g=omega3On100g, sugarOn100g=sugarOn100g)
+            # Lấy giá trị từ request data
+            foodName = data['foodName']
+            kcalOn100g = data['kcalOn100g']
+            proteinOn100g = data['proteinOn100g']
+            carbsOn100g = data['carbsOn100g']
+            fatOn100g = data['fatOn100g']
+            fiberOn100g = data['fiberOn100g']
+            omega3On100g = data['omega3On100g']
+            sugarOn100g = data['sugarOn100g']
+            nutritionValue = data['nutritionValue']
+            preservation = data.get('preservation')  # Preserve None if no value
+            note = data.get('note')  # Preserve None if no value
+
+            # Tạo mới thực phẩm và thêm vào cơ sở dữ liệu
+            new_food = Foods(
+                foodName=foodName, kcalOn100g=kcalOn100g, nutritionValue=nutritionValue,
+                preservation=preservation, note=note, proteinOn100g=proteinOn100g, carbsOn100g=carbsOn100g,
+                fatOn100g=fatOn100g, fiberOn100g=fiberOn100g, omega3On100g=omega3On100g, sugarOn100g=sugarOn100g,
+                image=None
+            )
             db.session.add(new_food)
             db.session.commit()
 
+            # Trả về thông tin thực phẩm đã thêm vào
             return jsonify({
                 "foodID": new_food.foodID,
                 "foodName": new_food.foodName,
-                "image": new_food.image if new_food.image else None,
+                "image": new_food.image or None,
                 "kcalOn100g": new_food.kcalOn100g,
-                # "proteinOn100g": new_food.proteinOn100g,
-                # "carbsOn100g": new_food.carbsOn100g,
-                # "fatOn100g": new_food.fatOn100g,
-                # "fiberOn100g": new_food.fiberOn100g,
-                # "omega3On100g": new_food.omega3On100g,
-                # "sugarOn100g": new_food.sugarOn100g,
+                "proteinOn100g": new_food.proteinOn100g,
+                "carbsOn100g": new_food.carbsOn100g,
+                "fatOn100g": new_food.fatOn100g,
+                "fiberOn100g": new_food.fiberOn100g,
+                "omega3On100g": new_food.omega3On100g,
+                "sugarOn100g": new_food.sugarOn100g,
                 "nutritionValue": new_food.nutritionValue,
-                "preservation": new_food.preservation if new_food.preservation else None,
-                "note": new_food.note if new_food.note else None,
+                "preservation": new_food.preservation or None,
+                "note": new_food.note or None,
                 "created_date": new_food.created_date.strftime("%Y-%m-%d"),
                 "modified_date": new_food.modified_date.strftime("%Y-%m-%d") if new_food.modified_date else None
             }), 200
-        except IndentationError:
+        except Exception as e:
             db.session.rollback()
-            return jsonify({"message": "Can not add food!"}), 400
+            return jsonify({"message": f"Can not add food! Error: {str(e)}"}), 400
     else:
-        return jsonify({"message": "Request error!"}), 400
+        return jsonify({"message": "Invalid data, missing required fields!"}), 400
 
 
 # GET IMG FOOD
@@ -178,7 +225,7 @@ def get_food_by_id_service(id):
             return jsonify({
                 "foodID": food.foodID,
                 "foodName": food.foodName,
-                "image": food.image if food.image else None,
+                "image": food.image or None,
                 "kcalOn100g": food.kcalOn100g,
                 "proteinOn100g": food.proteinOn100g,
                 "carbsOn100g": food.carbsOn100g,
@@ -187,8 +234,8 @@ def get_food_by_id_service(id):
                 "omega3On100g": food.omega3On100g,
                 "sugarOn100g": food.sugarOn100g,
                 "nutritionValue": food.nutritionValue,
-                "preservation": food.preservation if food.preservation else None,
-                "note": food.note if food.note else None,
+                "preservation": food.preservation or None,
+                "note": food.note or None,
                 "created_date": food.created_date.strftime("%Y-%m-%d"),
                 "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
             }), 200
@@ -209,11 +256,11 @@ def get_all_foods_service():
                 list_foods.append({
                     "foodID": food.foodID,
                     "foodName": food.foodName,
-                    "image": food.image if food.image else None,
+                    "image": food.image or None,
                     "kcalOn100g": food.kcalOn100g,
                     "nutritionValue": food.nutritionValue,
-                    "preservation": food.preservation if food.preservation else None,
-                    "note": food.note if food.note else None,
+                    "preservation": food.preservation or None,
+                    "note": food.note or None,
                     "created_date": food.created_date.strftime("%Y-%m-%d"),
                     "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
                 })
@@ -229,47 +276,56 @@ def get_all_foods_service():
 def update_food_by_id_service(id):
     try:
         food = Foods.query.get(id)
-        data = request.json
-        if food:
-            if data and all(
-                    key in data for key in ('foodName', 'kcalOn100g', 'proteinOn100g', 'carbsOn100g', 'fatOn100g',
-                                            'fiberOn100g', 'omega3On100g', 'sugarOn100g', 'nutritionValue',
-                                            'preservation', 'note')) \
-                    and data['foodName'] and data['kcalOn100g'] and data['proteinOn100g'] and data['carbsOn100g'] \
-                    and data['fatOn100g'] and data['fiberOn100g'] and data['omega3On100g'] and data['sugarOn100g'] \
-                    and data['nutritionValue'] and data['foodName'] != "" and data['nutritionValue'] != "":
-                try:
-                    food.foodName = data['foodName']
-                    food.kcalOn100g = data['kcalOn100g']
-                    food.proteinOn100g = data['proteinOn100g']
-                    food.carbsOn100g = data['carbsOn100g']
-                    food.fatOn100g = data['fatOn100g']
-                    food.fiberOn100g = data['fiberOn100g']
-                    food.omega3On100g = data['omega3On100g']
-                    food.sugarOn100g = data['sugarOn100g']
-                    food.nutritionValue = data['nutritionValue']
-                    food.preservation = data['preservation'] if data['preservation'] else None
-                    food.note = data['note'] if data['note'] else None
+        if not food:
+            return jsonify({"message": "Food not found!"}), 404
 
-                    return jsonify({
-                        "foodID": food.foodID,
-                        "foodName": food.foodName,
-                        "image": food.image if food.image else None,
-                        "kcalOn100g": food.kcalOn100g,
-                        "nutritionValue": food.nutritionValue,
-                        "preservation": food.preservation if food.preservation else None,
-                        "note": food.note if food.note else None,
-                        "created_date": food.created_date.strftime("%Y-%m-%d"),
-                        "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
-                    }), 200
-                except IndentationError:
-                    db.session.rollback()
-                    return jsonify({"message": "Can not update food!"}), 400
+        # Get data from request
+        data = request.json
+        # Validate input data
+        required_fields = [
+            'foodName', 'kcalOn100g', 'proteinOn100g', 'carbsOn100g', 'fatOn100g',
+            'fiberOn100g', 'omega3On100g', 'sugarOn100g', 'nutritionValue', 'preservation', 'note'
+        ]
+        if all(key in data for key in required_fields) and data['foodName'] and data['nutritionValue']:
+            # Update food object with new data
+            food.foodName = data['foodName']
+            food.kcalOn100g = data['kcalOn100g']
+            food.proteinOn100g = data['proteinOn100g']
+            food.carbsOn100g = data['carbsOn100g']
+            food.fatOn100g = data['fatOn100g']
+            food.fiberOn100g = data['fiberOn100g']
+            food.omega3On100g = data['omega3On100g']
+            food.sugarOn100g = data['sugarOn100g']
+            food.nutritionValue = data['nutritionValue']
+            food.preservation = data.get('preservation')  # Preserve the None value if not provided
+            food.note = data.get('note')
+
+            db.session.commit()
+
+            # Return updated food info
+            return jsonify({
+                "foodID": food.foodID,
+                "foodName": food.foodName,
+                "image": food.image or None,
+                "kcalOn100g": food.kcalOn100g,
+                "proteinOn100g": food.proteinOn100g,
+                "carbsOn100g": food.carbsOn100g,
+                "fatOn100g": food.fatOn100g,
+                "fiberOn100g": food.fiberOn100g,
+                "omega3On100g": food.omega3On100g,
+                "sugarOn100g": food.sugarOn100g,
+                "nutritionValue": food.nutritionValue,
+                "preservation": food.preservation or None,
+                "note": food.note or None,
+                "created_date": food.created_date.strftime("%Y-%m-%d"),
+                "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
+            }), 200
         else:
-            return jsonify({"message": "Not found food!"}), 404
-    except IndentationError:
+            return jsonify({"message": "Invalid data, missing required fields!"}), 400
+
+    except Exception as e:
         db.session.rollback()
-        return jsonify({"message": "Request error!"}), 400
+        return jsonify({"message": f"Request error: {str(e)}"}), 400
 
 
 # DELETE FOODNUTRIENT
