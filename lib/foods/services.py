@@ -33,8 +33,8 @@ def food_to_dict(food):
         "foodName": food.foodName,
         "image": food.image or None,
         "nutritionValue": food.nutritionValue,
-        # "preservation": food.preservation or None,
-        # "note": food.note or None,
+        "preservation": food.preservation or None,
+        "note": food.note or None,
         "kcalOn100g": food.kcalOn100g,
         # "proteinOn100g": food.proteinOn100g,
         # "carbsOn100g": food.carbsOn100g,
@@ -42,8 +42,8 @@ def food_to_dict(food):
         # "fiberOn100g": food.fiberOn100g,
         # "omega3On100g": food.omega3On100g,
         # "sugarOn100g": food.sugarOn100g,
-        # "created_date": food.created_date.strftime("%Y-%m-%d"),
-        # "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
+        "created_date": food.created_date.strftime("%Y-%m-%d"),
+        "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
     }
 
 
