@@ -271,8 +271,8 @@ def get_all_foods_service():
                     "image": food.image or None,
                     "kcalOn100g": food.kcalOn100g,
                     "nutritionValue": food.nutritionValue,
-                    # "preservation": food.preservation or None,
-                    # "note": food.note or None,
+                    "preservation": food.preservation or None,
+                    "note": food.note or None,
                     "created_date": food.created_date.strftime("%Y-%m-%d"),
                     "modified_date": food.modified_date.strftime("%Y-%m-%d") if food.modified_date else None
                 })

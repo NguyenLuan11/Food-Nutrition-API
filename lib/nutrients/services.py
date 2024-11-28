@@ -96,10 +96,10 @@ def get_all_nutrient_service():
                     "description": item.description if item.description else None,
                     "needed": item.needed,
                     "function": item.function,
-                    # "deficiencySigns": item.deficiencySigns if item.deficiencySigns else None,
-                    # "excessSigns": item.excessSigns if item.excessSigns else None,
-                    # "subjectInterest": item.subjectInterest if item.subjectInterest else None,
-                    # "shortagePrevention": item.shortagePrevention if item.shortagePrevention else None,
+                    "deficiencySigns": item.deficiencySigns if item.deficiencySigns else None,
+                    "excessSigns": item.excessSigns if item.excessSigns else None,
+                    "subjectInterest": item.subjectInterest if item.subjectInterest else None,
+                    "shortagePrevention": item.shortagePrevention if item.shortagePrevention else None,
                     "created_date": item.created_date.strftime("%Y-%m-%d"),
                     "modified_date": item.modified_date.strftime("%Y-%m-%d") if item.modified_date else None
                 })
