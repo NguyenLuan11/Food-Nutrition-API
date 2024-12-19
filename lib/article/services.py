@@ -78,7 +78,7 @@ def add_article_service():
         content = data['content']
         categoryID = data['categoryID'] if data['categoryID'] else None
         try:
-            new_article = Article(title=title, author=author, shortDescription=shortDescription,
+            new_article = Article(title=title, thumbnail=None, author=author, shortDescription=shortDescription,
                                   content=content, categoryID=categoryID)
 
             db.session.add(new_article)
