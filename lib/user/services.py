@@ -1,18 +1,73 @@
-from ..model import db, User, UserBMI
+from ..model import db, User, UserBMI, OTP
 from ..food_nutrition_ma import UserSchema
-from flask import request, jsonify, send_from_directory, abort
-from sqlalchemy.sql import func
-from datetime import date, datetime
+from flask import request, jsonify, send_from_directory, abort, current_app
+from flask_mail import Message
+from random import randint
+from datetime import date, datetime, timedelta
 from sqlalchemy import event
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 from werkzeug.utils import secure_filename
 import os
-from ..config import ALLOWED_EXTENSIONS, UPLOAD_FOLDER_USERS
+from ..config import ALLOWED_EXTENSIONS, UPLOAD_FOLDER_USERS, MAIL_USERNAME
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
 UPLOAD_FOLDER_USERS = os.path.join(os.getcwd(), UPLOAD_FOLDER_USERS)
+
+
+# SEND OTP CODE
+def send_otp_service():
+    data = request.json
+    email = data.get('email')
+
+    if not email:
+        return jsonify({"message": "Email is required"}), 400
+
+    # Tạo mã OTP ngẫu nhiên
+    otp_code = str(randint(100000, 999999))
+    expiration_time = datetime.utcnow() + timedelta(minutes=5)
+
+    # Lưu OTP vào cơ sở dữ liệu
+    otp_record = OTP(email=email, otp=otp_code, expires_at=expiration_time)
+    db.session.add(otp_record)
+    db.session.commit()
+
+    # Gửi OTP qua email
+    try:
+        # Lấy đối tượng mail từ current_app
+        mail = current_app.extensions['mail']
+
+        msg = Message(
+            subject="Your OTP Code",
+            sender=MAIL_USERNAME,
+            recipients=[email],
+            body=f"Your OTP code is {otp_code}. It will expire in 5 minutes."
+        )
+        mail.send(msg)
+        return jsonify({"message": "OTP sent successfully"}), 200
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+
+
+# VERIFY OTP CODE
+def verify_otp_service():
+    data = request.json
+    email = data.get('email')
+    user_otp = data.get('otp')
+
+    if not email or not user_otp:
+        return jsonify({"message": "Email and OTP are required"}), 400
+
+    otp_record = OTP.query.filter_by(email=email, otp=user_otp).first()
+
+    if not otp_record:
+        return jsonify({"message": "Invalid OTP"}), 400
+
+    if otp_record.is_expired():
+        return jsonify({"message": "OTP has expired"}), 400
+
+    return jsonify({"message": "OTP verified successfully"}), 200
 
 
 # GET LIST USER BMI BY ID

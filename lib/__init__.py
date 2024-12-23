@@ -2,6 +2,7 @@ import os
 from zeroconf import ServiceInfo, Zeroconf
 import socket
 from flask import Flask, jsonify
+from flask_mail import Mail
 from flask_jwt_extended import JWTManager
 from flasgger import Swagger, swag_from
 from flask_cors import CORS
@@ -76,6 +77,9 @@ def create_app(config_file="config.py"):
     # JWT
     JWTManager(app)
 
+    # Mail
+    mail = Mail(app)
+
     # Register BluePrint
     app.register_blueprint(admin)
     app.register_blueprint(article)
@@ -87,7 +91,7 @@ def create_app(config_file="config.py"):
     app.register_blueprint(user)
     app.register_blueprint(userBMI)
 
-    print(app.config["SECRET_KEY"])
+    # print(app.config["SECRET_KEY"])
 
     # Swagger
     Swagger(app, config=swagger_config, template=template)

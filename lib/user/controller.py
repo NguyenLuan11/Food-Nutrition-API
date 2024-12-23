@@ -3,11 +3,20 @@ from .services import register_user_service, get_all_user_service, get_user_by_i
     update_user_by_id_service, delete_user_by_id_service, login_user_service, refresh_token_service, \
     update_image_avt_user_by_id_service, update_state_user_by_id_service, get_user_by_name_service, \
     get_user_by_email_gg_service, add_user_service, get_image_service, check_correct_pass_by_id_service, \
-    update_pass_by_id_service
+    update_pass_by_id_service, send_otp_service, verify_otp_service
 from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt
 
 user = Blueprint("user", __name__, url_prefix="/api/user-management")
+
+
+@user.route('/send-otp', methods=['POST'])
+def send_otp():
+    return send_otp_service()
+
+@user.route('/verify-otp', methods=['POST'])
+def verify_otp():
+    return verify_otp_service()
 
 
 # CHECK PASS USER

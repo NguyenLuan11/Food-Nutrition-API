@@ -1,6 +1,7 @@
 Flask>=2.0.1
 flask-cors>=3.0
 Flask-SQLAlchemy>=3.1.1
+flask-mail
 Flask-RESTful>=0.3.10
 flask-marshmallow>=0.14.0
 marshmallow-sqlalchemy>=1.0.0
