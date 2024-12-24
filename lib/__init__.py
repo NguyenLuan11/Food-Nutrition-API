@@ -18,6 +18,7 @@ from .nature_nutrient.controller import natureNutrient
 from .nutrients.controller import nutrients
 from .user.controller import user
 from .user_BMI.controller import userBMI
+from .comments.controller import comment
 
 
 # Automation get local IP address
@@ -90,6 +91,7 @@ def create_app(config_file="config.py"):
     app.register_blueprint(nutrients)
     app.register_blueprint(user)
     app.register_blueprint(userBMI)
+    app.register_blueprint(comment)
 
     # print(app.config["SECRET_KEY"])
 
