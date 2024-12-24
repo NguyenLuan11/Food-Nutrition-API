@@ -30,8 +30,11 @@ def add_comment_food_service():
             return jsonify({
                 "commentID": new_comment.commentID,
                 "userID": new_comment.userID,
+                "userName": user.userName,
+                "userImage": user.image or None,
                 "foodID": new_comment.foodID,
-                "content": new_comment.content
+                "content": new_comment.content,
+                "created_date": new_comment.created_date.strftime("%Y-%m-%d")
             }), 200
         except Exception as e:
             db.session.rollback()
@@ -67,8 +70,11 @@ def add_comment_nutrient_service():
             return jsonify({
                 "commentID": new_comment.commentID,
                 "userID": new_comment.userID,
+                "userName": user.userName,
+                "userImage": user.image or None,
                 "nutrientID": new_comment.nutrientID,
-                "content": new_comment.content
+                "content": new_comment.content,
+                "created_date": new_comment.created_date.strftime("%Y-%m-%d")
             }), 200
         except Exception as e:
             db.session.rollback()
@@ -104,8 +110,11 @@ def add_comment_article_service():
             return jsonify({
                 "commentID": new_comment.commentID,
                 "userID": new_comment.userID,
+                "userName": user.userName,
+                "userImage": user.image or None,
                 "articleID": new_comment.articleID,
-                "content": new_comment.content
+                "content": new_comment.content,
+                "created_date": new_comment.created_date.strftime("%Y-%m-%d")
             }), 200
         except Exception as e:
             db.session.rollback()
