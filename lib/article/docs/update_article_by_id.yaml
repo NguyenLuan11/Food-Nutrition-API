@@ -25,6 +25,7 @@ parameters:
         - "title"
         - "thumbnail"
         - "author"
+        - "origin"
         - "shortDescription"
         - "content"
         - "categoryID"
@@ -37,6 +38,9 @@ parameters:
         author:
           type: "string"
           example: "TS. Hoàng Minh Đăng"
+        origin:
+          type: "string"
+          example: "Hội chữ thập đỏ"
         shortDescription:
           type: "text"
           example: "Bài báo nghiên cứu về các chất dinh dưỡng cần thiết cho trẻ phát triển khỏe mạnh."

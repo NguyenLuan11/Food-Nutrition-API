@@ -70,15 +70,16 @@ def get_image_service(fileName):
 # ADD ARTICLE
 def add_article_service():
     data = request.json
-    if data and all(key in data for key in ('title', 'author', 'shortDescription', 'content',
+    if data and all(key in data for key in ('title', 'origin', 'author', 'shortDescription', 'content',
         'categoryID')) and data['title'] and data['content'] and data['title'] != "" and data['content'] != "":
         title = data['title']
         author = data['author'] if data['author'] else None
+        origin = data['origin'] if data['origin'] else None
         shortDescription = data['shortDescription'] if data['shortDescription'] else None
         content = data['content']
         categoryID = data['categoryID'] if data['categoryID'] else None
         try:
-            new_article = Article(title=title, thumbnail=None, author=author, shortDescription=shortDescription,
+            new_article = Article(title=title, thumbnail=None, author=author, origin=origin, shortDescription=shortDescription,
                                   content=content, categoryID=categoryID)
 
             db.session.add(new_article)
@@ -91,6 +92,7 @@ def add_article_service():
                 "title": new_article.title,
                 "thumbnail": new_article.thumbnail if new_article.thumbnail else None,
                 "author": new_article.author if new_article.author else None,
+                "origin": new_article.origin if new_article.origin else None,
                 "shortDescription": new_article.shortDescription if new_article.shortDescription else None,
                 "content": new_article.content,
                 # "category": category.categoryName if category else None,
@@ -117,6 +119,7 @@ def get_article_by_id_service(id):
                 "title": article.title,
                 "thumbnail": article.thumbnail if article.thumbnail else None,
                 "author": article.author if article.author else None,
+                "origin": article.origin if article.origin else None,
                 "shortDescription": article.shortDescription if article.shortDescription else None,
                 "content": article.content,
                 "categoryID": article.categoryID if article.categoryID else None,
@@ -144,6 +147,7 @@ def get_all_articles_service():
                     "title": article.title,
                     "thumbnail": article.thumbnail if article.thumbnail else None,
                     "author": article.author if article.author else None,
+                    "origin": article.origin if article.origin else None,
                     "shortDescription": article.shortDescription if article.shortDescription else None,
                     "content": article.content,
                     "categoryID": article.categoryID if article.categoryID else None,
@@ -165,11 +169,12 @@ def update_article_by_id_service(id):
         article = Article.query.get(id)
         data = request.json
         if article:
-            if data and all(key in data for key in ('title', 'author', 'shortDescription', 'content',
+            if data and all(key in data for key in ('title', 'author', 'origin', 'shortDescription', 'content',
                 'categoryID')) and data['title'] and data['content'] and data['title'] != "" and data['content'] != "":
                 try:
                     article.title = data['title']
                     article.author = data['author'] if data['author'] else None
+                    article.origin = data['origin'] if data['origin'] else None
                     article.shortDescription = data['shortDescription'] if data['shortDescription'] else None
                     article.content = data['content']
                     article.categoryID = data['categoryID'] if data['categoryID'] else None
@@ -183,6 +188,7 @@ def update_article_by_id_service(id):
                         "title": article.title,
                         "thumbnail": article.thumbnail if article.thumbnail else None,
                         "author": article.author if article.author else None,
+                        "origin": article.origin if article.origin else None,
                         "shortDescription": article.shortDescription if article.shortDescription else None,
                         "content": article.content,
                         "categoryID": article.categoryID if article.categoryID else None,
@@ -234,6 +240,7 @@ def get_article_by_category_service(categoryName):
                     "title": article.title,
                     "thumbnail": article.thumbnail if article.thumbnail else None,
                     "author": article.author if article.author else None,
+                    "origin": article.origin if article.origin else None,
                     "shortDescription": article.shortDescription if article.shortDescription else None,
                     "content": article.content,
                     "categoryID": article.categoryID if article.categoryID else None,

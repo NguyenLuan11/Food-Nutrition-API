@@ -190,6 +190,7 @@ class Article(db.Model):
     title = db.Column(db.String(255), nullable=False)
     thumbnail = db.Column(db.Text)
     author = db.Column(db.String(100))
+    origin = db.Column(db.String(200))
     shortDescription = db.Column(db.Text)
     content = db.Column(db.Text, nullable=False)
     categoryID = db.Column(db.Integer, db.ForeignKey("category_article.categoryID"))
