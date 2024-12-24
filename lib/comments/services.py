@@ -129,7 +129,7 @@ def get_all_comments_by_foodID_service(foodID):
             user = User.query.get(comment.userID)
             if user:
                 comment_list.append({
-                    "commentID": comment.id,
+                    "commentID": comment.commentID,
                     "userName": user.userName,
                     "userImage": user.image or None,
                     "content": comment.content,
@@ -155,7 +155,7 @@ def get_all_comments_by_nutrientID_service(nutrientID):
             user = User.query.get(comment.userID)
             if user:
                 comment_list.append({
-                    "commentID": comment.id,
+                    "commentID": comment.commentID,
                     "userName": user.userName,
                     "userImage": user.image or None,
                     "content": comment.content,
@@ -181,7 +181,7 @@ def get_all_comments_by_articleID_service(articleID):
             user = User.query.get(comment.userID)
             if user:
                 comment_list.append({
-                    "commentID": comment.id,
+                    "commentID": comment.commentID,
                     "userName": user.userName,
                     "userImage": user.image or None,
                     "content": comment.content,
