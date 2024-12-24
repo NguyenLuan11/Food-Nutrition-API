@@ -4,6 +4,54 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
+class CommentFood(db.Model):
+    __tablename__ = 'comment_food'
+
+    commentID = db.Column(db.Integer, primary_key=True)
+    foodID = db.Column(db.Integer, db.ForeignKey("foods.foodID"), nullable=False)  # Liên kết với Foods
+    userID = db.Column(db.Integer, db.ForeignKey("user.userID"), nullable=False)  # Liên kết với User
+    content = db.Column(db.Text, nullable=False)
+    created_date = db.Column(db.DateTime, default=datetime.now)
+    modified_date = db.Column(db.DateTime, onupdate=datetime.now)
+
+    def __init__(self, foodID, userID, content):
+        self.foodID = foodID
+        self.userID = userID
+        self.content = content
+
+
+class CommentNutrient(db.Model):
+    __tablename__ = 'comment_nutrient'
+
+    commentID = db.Column(db.Integer, primary_key=True)
+    nutrientID = db.Column(db.Integer, db.ForeignKey("nutrients.nutrientID"), nullable=False)  # Liên kết với Nutrients
+    userID = db.Column(db.Integer, db.ForeignKey("user.userID"), nullable=False)  # Liên kết với User
+    content = db.Column(db.Text, nullable=False)
+    created_date = db.Column(db.DateTime, default=datetime.now)
+    modified_date = db.Column(db.DateTime, onupdate=datetime.now)
+
+    def __init__(self, nutrientID, userID, content):
+        self.nutrientID = nutrientID
+        self.userID = userID
+        self.content = content
+
+
+class CommentArticle(db.Model):
+    __tablename__ = 'comment_article'
+
+    commentID = db.Column(db.Integer, primary_key=True)
+    articleID = db.Column(db.Integer, db.ForeignKey("article.articleID"), nullable=False)  # Liên kết với Articles
+    userID = db.Column(db.Integer, db.ForeignKey("user.userID"), nullable=False)  # Liên kết với User
+    content = db.Column(db.Text, nullable=False)
+    created_date = db.Column(db.DateTime, default=datetime.now)
+    modified_date = db.Column(db.DateTime, onupdate=datetime.now)
+
+    def __init__(self, articleID, userID, content):
+        self.articleID = articleID
+        self.userID = userID
+        self.content = content
+
+
 class OTP(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
@@ -54,6 +102,10 @@ class User(db.Model):
     # Thêm mối quan hệ với UserBMI và sử dụng cascade để xóa UserBMI khi User bị xóa
     bmis = db.relationship('UserBMI', backref='user', cascade="all, delete-orphan")
 
+    comments_food = db.relationship('CommentFood', backref='user', cascade="all, delete-orphan")
+    comments_nutrient = db.relationship('CommentNutrient', backref='user', cascade="all, delete-orphan")
+    comments_article = db.relationship('CommentArticle', backref='user', cascade="all, delete-orphan")
+
     def __init__(self, userName, fullName, image, password, dateBirth, email, phone, address):
         self.userName = userName
         self.fullName = fullName
@@ -98,6 +150,7 @@ class Foods(db.Model):
     modified_date = db.Column(db.DateTime, onupdate=datetime.now)
 
     food_nutrient = db.relationship('FoodNutrient', backref='foods', cascade="all, delete-orphan")
+    comments = db.relationship('CommentFood', backref='foods', cascade="all, delete-orphan")
 
     def __init__(self, foodName, image, kcalOn100g, nutritionValue, preservation, note,
                  proteinOn100g, carbsOn100g, fatOn100g, fiberOn100g, omega3On100g, sugarOn100g):
@@ -134,7 +187,7 @@ class Nutrients(db.Model):
     nutrientName = db.Column(db.String(50), nullable=False)
     natureID = db.Column(db.Integer, db.ForeignKey("nature_nutrient.natureID"))
     description = db.Column(db.Text)
-    needed = db.Column(db.Float, nullable=False)
+    needed = db.Column(db.String(50), nullable=False)
     function = db.Column(db.Text, nullable=False)
     deficiencySigns = db.Column(db.Text)
     excessSigns = db.Column(db.Text)
@@ -144,6 +197,7 @@ class Nutrients(db.Model):
     modified_date = db.Column(db.DateTime, onupdate=datetime.now)
 
     food_nutrient = db.relationship('FoodNutrient', backref='nutrients', cascade="all, delete-orphan")
+    comments = db.relationship('CommentNutrient', backref='nutrients', cascade="all, delete-orphan")
 
     def __init__(self, nutrientName, natureID, description, needed, function, deficiencySigns, excessSigns,
                  subjectInterest, shortagePrevention):
@@ -196,6 +250,8 @@ class Article(db.Model):
     categoryID = db.Column(db.Integer, db.ForeignKey("category_article.categoryID"))
     created_date = db.Column(db.DateTime, default=datetime.now)
     modified_date = db.Column(db.DateTime, onupdate=datetime.now)
+
+    comments = db.relationship('CommentArticle', backref='article', cascade="all, delete-orphan")
 
     def __init__(self, title, thumbnail, author, shortDescription, content, categoryID):
         self.title = title

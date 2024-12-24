@@ -43,8 +43,8 @@ parameters:
           example: "Carbohydrate, hoặc carbs, là các phân tử đường . Cùng với protein và chất béo, carbohydrate là một 
           trong ba chất dinh dưỡng chính có trong thực phẩm và đồ uống. Cơ thể bạn phân hủy carbohydrate thành glucose. Glucose, hay đường huyết, là nguồn năng lượng chính cho tế bào, mô và cơ quan của cơ thể bạn."
         needed:
-          type: "float"
-          example: 125
+          type: "String"
+          example: "125 mg/ngày"
         function:
           type: "text"
           example: "Carbohydrate đóng vai trò quan trọng trong cơ thể con người. Chúng hoạt động như một nguồn năng lượng, 
