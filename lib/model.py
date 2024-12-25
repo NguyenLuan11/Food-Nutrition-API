@@ -245,6 +245,7 @@ class Article(db.Model):
     thumbnail = db.Column(db.Text)
     author = db.Column(db.String(100))
     origin = db.Column(db.String(200))
+    linkOrigin = db.Column(db.String(255))
     shortDescription = db.Column(db.Text)
     content = db.Column(db.Text, nullable=False)
     categoryID = db.Column(db.Integer, db.ForeignKey("category_article.categoryID"))
