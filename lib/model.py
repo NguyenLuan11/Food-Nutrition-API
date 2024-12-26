@@ -254,10 +254,12 @@ class Article(db.Model):
 
     comments = db.relationship('CommentArticle', backref='article', cascade="all, delete-orphan")
 
-    def __init__(self, title, thumbnail, author, shortDescription, content, categoryID):
+    def __init__(self, title, thumbnail, author, origin, linkOrigin, shortDescription, content, categoryID):
         self.title = title
         self.thumbnail = thumbnail
         self.author = author
         self.shortDescription = shortDescription
         self.content = content
         self.categoryID = categoryID
+        self.origin = origin
+        self.linkOrigin = linkOrigin
