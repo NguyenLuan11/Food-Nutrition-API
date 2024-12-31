@@ -106,16 +106,18 @@ class PlanRecommend(db.Model):
     activity_level = db.Column(db.String(50), nullable=False)
     plan = db.Column(db.Text, nullable=False)
     target_calories_per_day = db.Column(db.Float, nullable=False)
+    water_need_per_day = db.Column(db.Float, nullable=False)
     meals_allocation = db.Column(db.Text, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.now)
 
-    def __init__(self, userID, goal, activity_level, meals_allocation, plan, target_calories_per_day):
+    def __init__(self, userID, goal, activity_level, meals_allocation, plan, target_calories_per_day, water_need_per_day):
         self.userID = userID
         self.goal = goal
         self.activity_level = activity_level
         self.meals_allocation = meals_allocation
         self.plan = plan
         self.target_calories_per_day = target_calories_per_day
+        self.water_need_per_day = water_need_per_day
 
 
 class User(db.Model):

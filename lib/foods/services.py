@@ -100,6 +100,9 @@ def generate_plan_service():
         user.ideal_weight = ideal_weight
         db.session.commit()
 
+        # Calculate water need per day for user
+        water_need_per_day = weight * 0.03
+
         # Get list recommend foods
         list_recommended_foods = get_list_recommend_foods_by_bmi(bmi)
 
@@ -141,6 +144,7 @@ def generate_plan_service():
             activity_level=activity_level,
             plan=str(plan),
             target_calories_per_day=target_calories,
+            water_need_per_day=water_need_per_day,
             meals_allocation=str(meals)
         )
         db.session.add(plan_data)
@@ -149,6 +153,7 @@ def generate_plan_service():
         return jsonify({
             "ideal_weight": round(ideal_weight, 2),
             "target_calories": round(target_calories, 2),
+            "water_need_per_day": round(water_need_per_day, 2),
             "meals_allocation": meals,
             "plan": plan
         }), 200
@@ -197,8 +202,9 @@ def get_latest_plan_by_user_id_service(user_id):
             "goal": plan_data.goal,
             "activity_level": plan_data.activity_level,
             "target_calories_per_day": plan_data.target_calories_per_day,
-            "meals_allocation": meals_allocation,  # Chuyển chuỗi thành dict an toàn
-            "plan": plan,  # Chuyển chuỗi thành list an toàn
+            "water_need_per_day": plan_data.water_need_per_day,
+            "meals_allocation": meals_allocation,
+            "plan": plan,
             "created_date": plan_data.created_date.strftime("%Y-%m-%d")
         }
 
