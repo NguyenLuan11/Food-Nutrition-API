@@ -96,7 +96,7 @@ def generate_plan_service():
             db.session.commit()
 
         # Calculate ideal weight for user
-        ideal_weight = (height / 100 - 100) * 0.9
+        ideal_weight = (height - 100) * 0.9
         user.ideal_weight = ideal_weight
         db.session.commit()
 
