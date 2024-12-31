@@ -114,10 +114,10 @@ def generate_plan_service():
 
         # Allocate calories to meals
         meals = {
-            'breakfast': target_calories * 0.25,
-            'lunch': target_calories * 0.4,
-            'dinner': target_calories * 0.3,
-            'snack': target_calories * 0.05,
+            "breakfast": target_calories * 0.25,
+            "lunch": target_calories * 0.4,
+            "dinner": target_calories * 0.3,
+            "snack": target_calories * 0.05,
         }
 
         # Create a 14-day itinerary
