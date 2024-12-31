@@ -83,16 +83,55 @@ class Admin(db.Model):
         self.email = email
 
 
+class Exercise(db.Model):
+    __tablename__ = 'exercise'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nameExercise = db.Column(db.String(100), nullable=False)
+    kind = db.Column(db.String(50), nullable=False)  # Loại bài tập (ví dụ: cardio, strength, v.v.)
+    created_date = db.Column(db.DateTime, default=datetime.now)
+    modified_date = db.Column(db.DateTime, onupdate=datetime.now)
+
+    def __init__(self, nameExercise, kind):
+        self.nameExercise = nameExercise
+        self.kind = kind
+
+
+class PlanRecommend(db.Model):
+    __tablename__ = 'plan_recommend'
+
+    id = db.Column(db.Integer, primary_key=True)
+    userID = db.Column(db.Integer, db.ForeignKey("user.userID"))
+    goal = db.Column(db.String(50), nullable=False)
+    activity_level = db.Column(db.String(50), nullable=False)
+    plan = db.Column(db.Text, nullable=False)
+    target_calories_per_day = db.Column(db.Float, nullable=False)
+    meals_allocation = db.Column(db.Text, nullable=False)
+    created_date = db.Column(db.DateTime, default=datetime.now)
+
+    def __init__(self, userID, goal, activity_level, meals_allocation, plan, target_calories_per_day):
+        self.userID = userID
+        self.goal = goal
+        self.activity_level = activity_level
+        self.meals_allocation = meals_allocation
+        self.plan = plan
+        self.target_calories_per_day = target_calories_per_day
+
+
 class User(db.Model):
     __tablename__ = 'user'
 
     userID = db.Column(db.Integer, primary_key=True)
     userName = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
     fullName = db.Column(db.String(100))
+    gender = db.Column(db.String(10))
+    weight = db.Column(db.Float)
+    height = db.Column(db.Float)
+    ideal_weight = db.Column(db.Float)
     image = db.Column(db.String(100))
     password = db.Column(db.String(100))
     dateBirth = db.Column(db.Date)
-    email = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(12))
     address = db.Column(db.String(255))
     state = db.Column(db.Boolean, default=True)
@@ -106,9 +145,16 @@ class User(db.Model):
     comments_nutrient = db.relationship('CommentNutrient', backref='user', cascade="all, delete-orphan")
     comments_article = db.relationship('CommentArticle', backref='user', cascade="all, delete-orphan")
 
-    def __init__(self, userName, fullName, image, password, dateBirth, email, phone, address):
+    plan_recommend = db.relationship('PlanRecommend', backref='user', cascade="all, delete-orphan")
+
+    def __init__(self, userName, fullName, weight, height, ideal_weight, gender,
+                 image, password, dateBirth, email, phone, address):
         self.userName = userName
         self.fullName = fullName
+        self.ideal_weight = ideal_weight
+        self.weight = weight
+        self.height = height
+        self.gender = gender
         self.image = image
         self.password = password
         self.email = email

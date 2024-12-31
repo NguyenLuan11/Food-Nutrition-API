@@ -2,10 +2,25 @@ from flask import request, jsonify
 from ..model import db, User, UserBMI
 from ..food_nutrition_ma import UserBMISchema
 from sqlalchemy.sql import func
+from sqlalchemy.sql import desc
 
 
 userBMI_schema = UserBMISchema()
 userBMIs_schema = UserBMISchema(many=True)
+
+
+def get_latest_result_BMI_by_userID(user_id):
+    try:
+        # Lấy kết quả BMI gần nhất theo userID, sắp xếp theo ngày kiểm tra (giảm dần)
+        latest_user_bmi = UserBMI.query.filter_by(userID=user_id).order_by(desc(UserBMI.check_date)).first()
+
+        if latest_user_bmi:
+            return latest_user_bmi.result
+        else:
+            return None
+
+    except Exception as e:
+        return f"Error get latest result BMI: {str(e)}"
 
 
 def add_userBMI_service():

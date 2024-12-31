@@ -116,6 +116,10 @@ def login_user_service():
                 "email": user.email,
                 "phone": user.phone if user.phone else None,
                 "address": user.address if user.address else None,
+                "weight": user.weight if user.weight else None,
+                "height": user.height if user.height else None,
+                "ideal_weight": user.ideal_weight if user.ideal_weight else None,
+                "gender": user.gender if user.gender else None,
                 "state": user.state,
                 "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
@@ -153,6 +157,10 @@ def get_user_infor_by_access_token_service():
             "email": user.email,
             "phone": user.phone if user.phone else None,
             "address": user.address if user.address else None,
+            "weight": user.weight if user.weight else None,
+            "height": user.height if user.height else None,
+            "ideal_weight": user.ideal_weight if user.ideal_weight else None,
+            "gender": user.gender if user.gender else None,
             "state": user.state,
             "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
             "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
@@ -193,6 +201,10 @@ def register_user_service():
                 "email": new_user.email,
                 "phone": new_user.phone if new_user.phone else None,
                 "address": new_user.address if new_user.address else None,
+                "weight": new_user.weight if new_user.weight else None,
+                "height": new_user.height if new_user.height else None,
+                "ideal_weight": new_user.ideal_weight if new_user.ideal_weight else None,
+                "gender": new_user.gender if new_user.gender else None,
                 "state": new_user.state,
                 "dateJoining": new_user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": new_user.modified_date.strftime("%Y-%m-%d") if new_user.modified_date else None,
@@ -209,7 +221,7 @@ def register_user_service():
 def add_user_service():
     data = request.json
     if data and all(key in data for key in ('userName', 'fullName', 'image', 'password', 'dateBirth', 'email',
-                                            'phone', 'address')) \
+                                            'phone', 'address', 'weight', 'height', 'gender')) \
             and data['userName'] and data['email'] \
             and data['userName'] != "" and data['password'] != "" and data['dateBirth'] != "" and data['email'] != "" \
             and data['fullName'] != "" and data['image'] != "" and data['phone'] != "" and data['address'] != "":
@@ -225,10 +237,14 @@ def add_user_service():
         image = data['image'] if data['image'] else None
         phone = data['phone'] if data['phone'] else None
         address = data['address'] if data['address'] else None
+        weight = data['weight'] if data['weight'] else None
+        height = data['height'] if data['height'] else None
+        gender = data['gender'] if data['gender'] else None
 
         try:
             new_user = User(userName=userName, fullName=fullName, image=image, password=password, dateBirth=dateBirth,
-                            email=email, phone=phone, address=address)
+                            email=email, phone=phone, address=address,
+                            weight=weight, height=height, gender=gender, ideal_weight=None)
 
             db.session.add(new_user)
             db.session.commit()
@@ -244,6 +260,9 @@ def add_user_service():
                 "email": new_user.email,
                 "phone": new_user.phone if new_user.phone else None,
                 "address": new_user.address if new_user.address else None,
+                "weight": new_user.weight if new_user.weight else None,
+                "height": new_user.height if new_user.height else None,
+                "gender": new_user.gender if new_user.gender else None,
                 "state": new_user.state,
                 "dateJoining": new_user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": new_user.modified_date.strftime("%Y-%m-%d") if new_user.modified_date else None,
@@ -402,6 +421,10 @@ def get_user_by_id_service(id):
                 "email": user.email,
                 "phone": user.phone if user.phone else None,
                 "address": user.address if user.address else None,
+                "weight": user.weight if user.weight else None,
+                "height": user.height if user.height else None,
+                "ideal_weight": user.ideal_weight if user.ideal_weight else None,
+                "gender": user.gender if user.gender else None,
                 "state": user.state,
                 "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
@@ -430,6 +453,10 @@ def get_user_by_name_service(userName):
                 "email": user.email,
                 "phone": user.phone if user.phone else None,
                 "address": user.address if user.address else None,
+                "weight": user.weight if user.weight else None,
+                "height": user.height if user.height else None,
+                "ideal_weight": user.ideal_weight if user.ideal_weight else None,
+                "gender": user.gender if user.gender else None,
                 "state": user.state,
                 "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
@@ -462,6 +489,10 @@ def get_user_by_email_gg_service(userName, email):
                 "email": user.email,
                 "phone": user.phone if user.phone else None,
                 "address": user.address if user.address else None,
+                "weight": user.weight if user.weight else None,
+                "height": user.height if user.height else None,
+                "ideal_weight": user.ideal_weight if user.ideal_weight else None,
+                "gender": user.gender if user.gender else None,
                 "state": user.state,
                 "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                 "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
@@ -494,6 +525,10 @@ def get_all_user_service():
                     "email": user.email,
                     "phone": user.phone if user.phone else None,
                     "address": user.address if user.address else None,
+                    "weight": user.weight if user.weight else None,
+                    "height": user.height if user.height else None,
+                    "ideal_weight": user.ideal_weight if user.ideal_weight else None,
+                    "gender": user.gender if user.gender else None,
                     "state": user.state,
                     "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                     "modified_date": user.modified_date.strftime("%Y-%m-%d") if user.modified_date else None,
@@ -513,7 +548,8 @@ def update_user_by_id_service(id):
         user = User.query.get(id)
         data = request.json
         if user:
-            if data and all(key in data for key in ('userName', 'fullName', 'dateBirth', 'email', 'phone', 'address')) \
+            if data and all(key in data for key in ('userName', 'fullName', 'dateBirth', 'email', 'phone', 'address',
+                                                    'weight', 'height', 'gender')) \
                 and data['userName'] and data['email'] \
                     and data['userName'] != "" and data['dateBirth'] != "" and data['email'] != "":
                 try:
@@ -525,6 +561,9 @@ def update_user_by_id_service(id):
                     user.email = data['email']
                     user.phone = data['phone'] if data['phone'] else None
                     user.address = data['address'] if data['address'] else None
+                    user.weight = data['weight'] if data['weight'] else None
+                    user.height = data['height'] if data['height'] else None
+                    user.gender = data['gender'] if data['gender'] else None
 
                     db.session.commit()
 
@@ -533,12 +572,16 @@ def update_user_by_id_service(id):
                     return jsonify({
                         "userID": user.userID,
                         "userName": user.userName,
-                        "fullName": user.fullName,
+                        "fullName": user.fullName if user.fullName else None,
                         "image": user.image if user.image else None,
                         "dateBirth": user.dateBirth.strftime("%Y-%m-%d") if user.dateBirth else None,
                         "email": user.email,
-                        "phone": user.phone,
-                        "address": user.address,
+                        "phone": user.phone if user.phone else None,
+                        "address": user.address if user.address else None,
+                        "weight": user.weight if user.weight else None,
+                        "height": user.height if user.height else None,
+                        "ideal_weight": user.ideal_weight if user.ideal_weight else None,
+                        "gender": user.gender if user.gender else None,
                         "state": user.state,
                         "dateJoining": user.dateJoining.strftime("%Y-%m-%d"),
                         "modified_date": user.modified_date.strftime("%Y-%m-%d"),
