@@ -19,12 +19,11 @@ def add_categoryArticle_service():
             db.session.commit()
 
             return jsonify({
-                            "categoryID": new_categoryArticle.categoryID,
-                            "categoryName": new_categoryArticle.categoryName,
-                            "created_date": new_categoryArticle.created_date.strftime("%Y-%m-%d"),
-                            "modified_date": new_categoryArticle.modified_date.strftime("%Y-%m-%d")
-                            if new_categoryArticle.modified_date else None
-                            }), 200
+                "categoryID": new_categoryArticle.categoryID,
+                "categoryName": new_categoryArticle.categoryName,
+                "created_date": new_categoryArticle.created_date.strftime("%Y-%m-%d"),
+                "modified_date": new_categoryArticle.modified_date.strftime("%Y-%m-%d") if new_categoryArticle.modified_date else None
+            }), 200
         except IndentationError:
             db.session.rollback()
             return jsonify({"message": "Can not add category!"}), 400
