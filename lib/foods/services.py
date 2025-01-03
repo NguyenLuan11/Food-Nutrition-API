@@ -101,7 +101,7 @@ def generate_plan_service():
         db.session.commit()
 
         # Calculate water need per day for user
-        water_need_per_day = weight * 0.03
+        water_need_per_day = weight * 0.03 + 0.35
 
         # Get list recommend foods
         list_recommended_foods = get_list_recommend_foods_by_bmi(bmi)
