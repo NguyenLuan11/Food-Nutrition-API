@@ -1,4 +1,4 @@
-from ..model import db, Admin, Foods, Article, User, Nutrients, CategoryArticle
+from ..model import db, Admin, Foods, Article, User, Nutrients, CategoryArticle, Exercise
 from ..food_nutrition_ma import AdminSchema
 from flask import request, jsonify, send_from_directory, abort
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
@@ -19,6 +19,7 @@ def count_all_items_service():
         articles = Article.query.all()
         nutrients = Nutrients.query.all()
         categories = CategoryArticle.query.all()
+        exercises = Exercise.query.all()
 
         return jsonify({
             "foods": len(foods) if foods else 0,
@@ -26,6 +27,7 @@ def count_all_items_service():
             "articles": len(articles) if articles else 0,
             "nutrients": len(nutrients) if nutrients else 0,
             "categories": len(categories) if categories else 0,
+            "exercises": len(exercises) if exercises else 0,
         }), 200
     except IndentationError:
         db.session.rollback()
